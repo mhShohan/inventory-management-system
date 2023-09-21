@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const validateEmail = function (email) {
     var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -22,8 +23,6 @@ const userSchema = new mongoose.Schema({
     },
     photo: {
         type: String,
-        required: [true, 'Photo is required!'],
-        default: ''
     },
     phone: { type: String },
     bio: {
@@ -32,6 +31,16 @@ const userSchema = new mongoose.Schema({
     },
 
 }, { timestamps: true });
+
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashedPassword;
+
+    next();
+});
 
 const User = mongoose.model('user', userSchema);
 module.exports = User;
