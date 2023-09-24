@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
     phone: { type: String },
     bio: {
         type: String,
-        minLength: [250, 'Bio is not more then 250 characters']
+        maxLength: [250, 'Bio is not more then 250 characters']
     },
 
 }, { timestamps: true });

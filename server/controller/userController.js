@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const generateToken = require('../utils/generateToken');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 //project import 
 const User = require('../model/User');
@@ -79,7 +80,7 @@ handler.login = asyncHandler(async (req, res) => {
             secure: true
         });
 
-        return res.status(200).json({ email: user.email, name: user.name, token });
+        return res.status(200).json({ _id: user._id, email: user.email, name: user.name, token });
     } else {
         res.status(400);
         throw new Error('Invalid credentials');
@@ -96,6 +97,48 @@ handler.logout = asyncHandler(async (req, res) => {
     });
 
     return res.status(200).json({ message: 'Logout successfully!' });
+});
+
+handler.getSingleUser = asyncHandler(async (req, res) => {
+    res.status(200).json(req.user);
+});
+
+handler.verifyLoggedIn = asyncHandler(async (req, res) => {
+    try {
+        const token = req.cookies.token;
+        // const token = req.headers.authorization;
+        const decode = jwt.verify(token, process.env.JWT);
+
+
+        if (!decode) {
+            res.status(403);
+            throw new Error('Token Expired! Please login');
+        }
+
+        if (decode) {
+            return res.status(200).json(true);
+        }
+    } catch (error) {
+        return res.status(401).json(false);
+    }
+
+});
+
+handler.updateUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id).select('-password');
+
+    if (user) {
+        user.name = user.email;
+        user.name = req.body.name || user.name;
+        user.phone = req.body.phone || user.phone;
+        user.bio = req.body.bio || user.bio;
+        user.photo = req.body.photo || user.photo;
+
+        const updatedUser = await user.save();
+
+        return res.status(200).json(updatedUser);
+    }
+    return res.status(404).json({ error: 'User not updated!' });
 });
 
 module.exports = handler;
