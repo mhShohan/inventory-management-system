@@ -8,5 +8,7 @@ router.get('/logout', userController.logout);
 router.get('/', verifyAuth, userController.getSingleUser);
 router.get('/verifyLoggedIn', userController.verifyLoggedIn);
 router.patch('/update', verifyAuth, userController.updateUser);
+router.patch('/change-password', verifyAuth, userController.changePassword);
+router.post('/forgot-password', userController.forgotPassword);
 
 module.exports = router;

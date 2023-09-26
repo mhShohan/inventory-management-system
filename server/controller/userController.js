@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 //project import 
 const User = require('../model/User');
+const sendMail = require('../utils/sendMail');
 
 const handler = {};
 
@@ -105,8 +106,8 @@ handler.getSingleUser = asyncHandler(async (req, res) => {
 
 handler.verifyLoggedIn = asyncHandler(async (req, res) => {
     try {
-        const token = req.cookies.token;
-        // const token = req.headers.authorization;
+        // const token = req.cookies.token;
+        const token = req.headers.authorization;
         const decode = jwt.verify(token, process.env.JWT);
 
 
@@ -139,6 +140,37 @@ handler.updateUser = asyncHandler(async (req, res) => {
         return res.status(200).json(updatedUser);
     }
     return res.status(404).json({ error: 'User not updated!' });
+});
+
+handler.changePassword = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+
+    if (req.body.newPassword !== req.body.confirmPassword) {
+        res.status(409);
+        throw new Error('Must provide same password as confirm password');
+    }
+    const passwordMatch = await bcrypt.compare(req.body.oldPassword, user.password);
+
+    if (!passwordMatch) {
+        res.status(404);
+        throw new Error('Password does not match with old Password');
+    }
+
+
+    user.password = req.body.newPassword;
+    await user.save();
+
+    return res.status(200).json({ message: 'Password updated successfully!' });
+});
+
+handler.forgotPassword = asyncHandler(async (req, res) => {
+    const response = sendMail({
+        subject: 'hello',
+        message: 'hello',
+        sendTo: 'mehdihasanshohan17@gmail.com',
+        replyTo: 'mshohanhasan@gmail.com'
+    });
+    res.json({ message: 'mail sent', response });
 });
 
 module.exports = handler;
