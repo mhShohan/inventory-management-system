@@ -1,0 +1,142 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #BBE1FA;
+  font-family: 'Nunito', sans-serif !important;
+}
+
+.input-field {
+  width: 100%;
+  outline: none;
+  padding: .5rem;
+  border-radius: 6px;
+  border: 1px solid gray;
+  margin-bottom: .5rem;
+}
+
+.input-field-error {
+  border: 1px solid red;
+}
+
+li.ant-menu-item {
+  padding: 0 .8rem !important;
+}
+
+.label {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #E4E4E4;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #FF6565;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #FF6565;
+}
+
+
+.custom-table {
+  width: 100%;
+  font-size: 16px;
+  text-align: center;
+  font-size: .9rem;
+  table-layout: auto;
+}
+
+.custom-table th {
+  background-color: #f2f2f2;
+  padding: 6px;
+  font-weight: bold;
+  border: 1px solid #ddd;
+}
+
+.custom-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+
+.custom-table td {
+  padding: 4px;
+  border-bottom: 1px solid #ddd;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #e0e0e0;
+}
+
+.query-filter {
+  width: 75%;
+}
+
+.query-filter label {
+  font-weight: 700;
+}
+
+.sales {
+  padding: .6rem 2rem 2rem 2rem;
+  margin: .2rem;
+  border: 1px solid #000;
+  border-radius: 1rem;
+}
+
+.number-card {
+  width: 100%;
+  margin: 1rem;
+  border-radius: 1rem;
+  border: 1px solid gray;
+  padding: 2rem;
+  text-align: center;
+}
+
+.number-card h3 {
+  font-size: 1.4rem;
+}
+
+.number-card h1 {
+  font-size: 3rem;
+}
+
+.update-sale-modal {
+  border: 1px solid gray;
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.bulk-delete-btn {
+  padding: '0 .3rem';
+  height: '25px';
+  background-color: red !important;
+  opacity: .7;
+  transition: all 300ms;
+  color: '#fff'
+}
+
+.bulk-delete-btn:hover {
+  opacity: 1;
+  background-color: red !important;
+  color: #e0e0e0;
+}
+
+.bulk-delete-btn:disabled {
+  background-color: gray !important;
+  color: #e0e0e0;
+}
