@@ -20,7 +20,7 @@ const AllSalesPage = () => {
   if (isLoading) return <Loader />;
   else
     return (
-      <div>
+      <div style={{ width: '100%', overflow: 'auto' }}>
         {data?.data && <SaleTable data={data?.data} />}
         {data?.data <= 0 && (
           <h1 style={{ textAlign: 'center', margin: '3rem', color: 'red' }}>No Sale found!</h1>

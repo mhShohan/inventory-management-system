@@ -59,7 +59,6 @@ li.ant-menu-item {
   font-size: 16px;
   text-align: center;
   font-size: .9rem;
-  table-layout: auto;
 }
 
 .custom-table th {
@@ -96,15 +95,21 @@ li.ant-menu-item {
   margin: .2rem;
   border: 1px solid #000;
   border-radius: 1rem;
+  width: 100%;
+  overflow: auto;
 }
 
 .number-card {
   width: 100%;
-  margin: 1rem;
+  margin: .5rem;
+  min-height: 150px;
   border-radius: 1rem;
   border: 1px solid gray;
-  padding: 2rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .number-card h3 {
@@ -112,7 +117,7 @@ li.ant-menu-item {
 }
 
 .number-card h1 {
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
 
 .update-sale-modal {

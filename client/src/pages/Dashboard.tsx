@@ -11,11 +11,11 @@ const Dashboard = () => {
   else
     return (
       <Row gutter={0}>
-        <Col xs={{ span: 24 }} lg={{ span: 7 }} className='number-card'>
+        <Col xs={{ span: 23 }} lg={{ span: 7 }} className='number-card'>
           <h3>Total Stock (Flowers)</h3>
           <h1>{products?.data?.totalQuantity || 0}</h1>
         </Col>
-        <Col xs={{ span: 24 }} lg={{ span: 7 }} className='number-card'>
+        <Col xs={{ span: 23 }} lg={{ span: 7 }} className='number-card'>
           <h3>Total Sell (Flowers)</h3>
           <h1>
             {yearlyData?.data.reduce(
@@ -24,7 +24,7 @@ const Dashboard = () => {
             )}
           </h1>
         </Col>
-        <Col xs={{ span: 24 }} lg={{ span: 7 }} className='number-card'>
+        <Col xs={{ span: 23 }} lg={{ span: 7 }} className='number-card'>
           <h3>Total Revenue</h3>
           <h1>
             {yearlyData?.data.reduce(
