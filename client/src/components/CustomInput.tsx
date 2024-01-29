@@ -12,12 +12,12 @@ interface Props {
 const CustomInput = ({ name, errors, label, register, type = 'text' }: Props) => {
   return (
     <Row>
-      <Col span={6}>
+      <Col xs={{ span: 23 }} lg={{ span: 6 }}>
         <label htmlFor={name} className='label'>
           {label}
         </label>
       </Col>
-      <Col span={18}>
+      <Col xs={{ span: 23 }} lg={{ span: 18 }}>
         <input
           id={name}
           type={type}

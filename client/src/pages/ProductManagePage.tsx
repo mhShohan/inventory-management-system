@@ -101,10 +101,12 @@ const ProductManagePage = () => {
           </select>
         </Col>
       </Row>
-      {isFetching ? <Loader /> : <Table data={data?.data} />}
-      {data?.data <= 0 && (
-        <h1 style={{ textAlign: 'center', margin: '3rem', color: 'red' }}>No Product found!</h1>
-      )}
+      <div style={{ width: '100%', overflow: 'auto' }}>
+        {isFetching ? <Loader /> : <Table data={data?.data} />}
+        {data?.data <= 0 && (
+          <h1 style={{ textAlign: 'center', margin: '3rem', color: 'red' }}>No Product found!</h1>
+        )}
+      </div>
       <Flex justify='center' style={{ marginTop: '1rem' }}>
         <Pagination
           current={current}

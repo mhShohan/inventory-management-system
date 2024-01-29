@@ -37,12 +37,12 @@ const CreateProduct = () => {
         style={{
           width: '500px',
           margin: '1rem 0',
-          padding: '1rem 3rem',
+          padding: '1rem',
           border: '1px solid #164863',
           borderRadius: '.6rem',
         }}
       >
-        <h1 style={{ marginBottom: '.7rem', textAlign: 'center' }}>Add New Flower</h1>
+        <h1 style={{ marginBottom: '.4rem', textAlign: 'center' }}>Add New Flower</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CustomInput name='name' errors={errors} label='Name' register={register} />
           <CustomInput errors={errors} label='Color' name='color' register={register} />
@@ -70,12 +70,12 @@ const CreateProduct = () => {
             register={register}
           />
           <Row>
-            <Col span={6}>
+            <Col xs={{ span: 23 }} lg={{ span: 6 }}>
               <label htmlFor='Size' className='label'>
                 Size
               </label>
             </Col>
-            <Col span={18}>
+            <Col xs={{ span: 23 }} lg={{ span: 18 }}>
               <select
                 {...register('size', { required: true })}
                 className={`input-field ${errors['size'] ? 'input-field-error' : ''}`}
