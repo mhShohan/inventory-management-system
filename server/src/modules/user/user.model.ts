@@ -1,12 +1,17 @@
 import { Schema, model } from 'mongoose';
 import { IUser } from './user.interface';
 import hashPassword from '../../utils/hashPassword';
+import { UserRole } from '../../constant/userRole';
 
 const userSchema = new Schema<IUser>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true, select: 0 }
+    password: { type: String, required: true, select: 0 },
+    title: { type: String },
+    description: { type: String },
+    avatar: { type: String },
+    role: { type: String, enum: UserRole, default: 'USER' },
   },
   { timestamps: true }
 );
