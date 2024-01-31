@@ -1,0 +1,11 @@
+import { Schema, model } from "mongoose";
+import { ICategory } from "./category.interface";
+
+const categorySchema = new Schema<ICategory>({
+  user: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
+  category: { type: String, required: true }
+})
+
+
+const Category = model<ICategory>('category', categorySchema)
+export default Category
