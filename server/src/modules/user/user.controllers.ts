@@ -6,6 +6,7 @@ import userServices from './user.services';
 class UserControllers {
   private services = userServices;
 
+  // get self profile 
   getSelf = asyncHandler(async (req, res) => {
     const result = await this.services.getSelf(req.user._id);
 
@@ -17,6 +18,7 @@ class UserControllers {
     });
   });
 
+  // register new account
   register = asyncHandler(async (req, res) => {
     const result = await this.services.register(req.body);
 
@@ -28,6 +30,7 @@ class UserControllers {
     });
   });
 
+  // login into your registered account
   login = asyncHandler(async (req, res) => {
     const result = await this.services.login(req.body);
 
@@ -35,6 +38,18 @@ class UserControllers {
       success: true,
       statusCode: httpStatus.OK,
       message: 'User login successfully!',
+      data: result
+    });
+  });
+
+  // update profile
+  updateProfile = asyncHandler(async (req, res) => {
+    const result = await this.services.updateProfile(req.params.id, req.body);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'User Profile updated successfully!',
       data: result
     });
   });

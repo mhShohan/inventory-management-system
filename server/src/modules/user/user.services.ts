@@ -33,6 +33,11 @@ class UserServices {
       throw new CustomError(httpStatus.BAD_REQUEST, 'WrongCredentials');
     }
   }
+
+  // update user profile
+  async updateProfile(id: string, payload: Partial<IUser>) {
+    return this.model.findByIdAndUpdate(id, payload);
+  }
 }
 
 const userServices = new UserServices();
