@@ -8,5 +8,5 @@ const updateSchema = z.object({
   name: z.string().optional(),
 })
 
-const categoryValidator = { createSchema, updateSchema }
-export default categoryValidator
+const brandValidator = { createSchema, updateSchema }
+export default brandValidator

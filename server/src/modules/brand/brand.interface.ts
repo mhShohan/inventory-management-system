@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 
-export interface ICategory {
+export interface IBrand {
   user: Types.ObjectId
   name: string
 }
