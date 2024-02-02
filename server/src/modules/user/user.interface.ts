@@ -1,4 +1,4 @@
-import { TUserRole } from '../../constant/userRole'
+import { TUserRole, TUserStatus } from '../../constant/userRole'
 
 export interface IUser {
   name: string;
@@ -8,4 +8,5 @@ export interface IUser {
   role: TUserRole;
   avatar?: string;
   password: string;
+  status: TUserStatus;
 }

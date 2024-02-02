@@ -8,18 +8,21 @@ import Product from '../product/product.model';
 import CustomError from '../../errors/customError';
 
 class SaleServices extends BaseServices<any> {
-  constructor(model: any) {
-    super(model);
+  constructor(model: any, modelName: string) {
+    super(model, modelName);
   }
 
+  /**
+   * Create new sale and decrease product stock
+   */
   async create(payload: any, userId: string) {
     const { price, quantity } = payload;
     payload.user = userId;
     payload.totalPrice = price * quantity;
     const product = await Product.findById(payload.product);
 
-    if (quantity > product!.quantity) {
-      throw new CustomError(400, `${quantity} product are not available!`);
+    if (quantity > product!.stock) {
+      throw new CustomError(400, `${quantity} product are not available in stock!`);
     }
     let result: any[];
     const session = await mongoose.startSession();
@@ -27,7 +30,7 @@ class SaleServices extends BaseServices<any> {
     try {
       session.startTransaction();
 
-      await Product.findByIdAndUpdate(product?._id, { quantity: product!.quantity - quantity }, { session });
+      await Product.findByIdAndUpdate(product?._id, { quantity: product!.stock - quantity }, { session });
       result = await this.model.create([payload], { session });
       await session.commitTransaction();
 
@@ -40,8 +43,11 @@ class SaleServices extends BaseServices<any> {
     }
   }
 
+  /**
+   *  Get all sale 
+   */
   async readAll(query: Record<string, unknown> = {}, userId: string) {
-    let data = await this.model.aggregate([
+    const data = await this.model.aggregate([
       {
         $match: {
           user: new Types.ObjectId(userId)
@@ -50,10 +56,6 @@ class SaleServices extends BaseServices<any> {
       ...sortAndPaginatePipeline(query)
     ]);
 
-    data = await this.model.populate(data, {
-      path: 'product',
-      select: '-user -bloomDate -color -fragrance -createdAt -updatedAt -__v'
-    });
 
     const totalCount = await this.model.aggregate([
       {
@@ -220,15 +222,17 @@ class SaleServices extends BaseServices<any> {
       }
     ]);
   }
+
+  // get single sale
   async read(id: string, userId: string) {
     await this._isExists(id);
 
     return this.model.findOne({ user: new Types.ObjectId(userId), _id: id }).populate({
       path: 'product',
-      select: '-user -bloomDate -color -fragrance -createdAt -updatedAt -__v'
+      select: '-createdAt -updatedAt -__v'
     });
   }
 }
 
-const saleServices = new SaleServices(Sale);
+const saleServices = new SaleServices(Sale, 'modelName');
 export default saleServices;
