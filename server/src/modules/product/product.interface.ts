@@ -3,11 +3,11 @@ import { Types } from 'mongoose';
 export interface IProduct {
   user: Types.ObjectId;
   name: string;
-  color: string;
-  type: string;
-  size: string;
-  bloomDate: Date;
-  fragrance: string;
+  description?: string
+  variant?: string;
+  category: Types.ObjectId;
+  brand?: Types.ObjectId;
+  size?: string;
   price: number;
-  quantity: number;
+  stock: number;
 }

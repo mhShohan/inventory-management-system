@@ -5,13 +5,13 @@ const productSchema = new Schema<IProduct>(
   {
     user: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
     name: { type: String, required: true },
-    color: { type: String, required: true },
-    type: { type: String, required: true },
-    size: { type: String, required: true, enum: ['SMALL', 'MEDIUM', 'LARGE'] },
-    bloomDate: { type: Date, required: true },
-    fragrance: { type: String, required: true },
+    description: { type: String },
+    variant: { type: String },
+    size: { type: String, enum: ['SMALL', 'MEDIUM', 'LARGE'] },
+    category: { type: Schema.Types.ObjectId, required: true, ref: 'category' },
+    brand: { type: Schema.Types.ObjectId, ref: 'brand' },
     price: { type: Number, required: true },
-    quantity: { type: Number, required: true }
+    stock: { type: Number, required: true }
   },
   { timestamps: true }
 );

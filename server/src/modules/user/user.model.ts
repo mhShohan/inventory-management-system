@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { IUser } from './user.interface';
 import hashPassword from '../../utils/hashPassword';
-import { UserRole } from '../../constant/userRole';
+import { UserRole, UserStatus } from '../../constant/userRole';
 
 const userSchema = new Schema<IUser>(
   {
@@ -12,6 +12,7 @@ const userSchema = new Schema<IUser>(
     description: { type: String },
     avatar: { type: String },
     role: { type: String, enum: UserRole, default: 'USER' },
+    status: { type: String, enum: UserStatus, default: 'ACTIVE' }
   },
   { timestamps: true }
 );
