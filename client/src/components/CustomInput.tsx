@@ -2,14 +2,22 @@ import { Col, Row } from 'antd';
 
 interface Props {
   name: string;
-  errors: any;
+  errors?: any;
   label: string;
   type?: string;
   register: any;
+  required?: boolean;
   defaultValue?: any;
 }
 
-const CustomInput = ({ name, errors, label, register, type = 'text' }: Props) => {
+const CustomInput = ({
+  name,
+  errors = {},
+  required = false,
+  label,
+  register,
+  type = 'text',
+}: Props) => {
   return (
     <Row>
       <Col xs={{ span: 23 }} lg={{ span: 6 }}>
@@ -22,7 +30,7 @@ const CustomInput = ({ name, errors, label, register, type = 'text' }: Props) =>
           id={name}
           type={type}
           placeholder={label}
-          {...register(name, { required: true })}
+          {...register(name, { required: required })}
           className={`input-field ${errors[name] ? 'input-field-error' : ''}`}
         />
       </Col>

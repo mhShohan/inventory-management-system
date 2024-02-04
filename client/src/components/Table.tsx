@@ -15,7 +15,6 @@ import {
   toggleUpdateModel,
 } from '../redux/services/modal.Slice';
 import { IProduct } from '../types/prduct.types';
-import formatDate from '../utils/formatDate';
 import toastMessage from '../lib/toastMessage';
 
 const Table = ({ data }: { data: IProduct[] }) => {
@@ -75,14 +74,11 @@ const Table = ({ data }: { data: IProduct[] }) => {
             <th>
               <input type='checkbox' checked={allSelected} onChange={handleChange} />
             </th>
-            <th>Flower Name</th>
-            <th>Color</th>
-            <th>Type</th>
-            <th>Size</th>
-            <th>Bloom Date</th>
-            <th>Fragrance</th>
+            <th>Product Name</th>
+            <th>Category</th>
             <th>Price</th>
-            <th>Quantity</th>
+            <th>Stock</th>
+            <th>Brand</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -132,6 +128,8 @@ const SingleRow = ({ rowData }: { rowData: IProduct }) => {
     }
   };
 
+  console.log(rowData);
+
   return (
     <tr>
       <td>
@@ -142,13 +140,10 @@ const SingleRow = ({ rowData }: { rowData: IProduct }) => {
         />
       </td>
       <td>{rowData.name}</td>
-      <td>{rowData.color}</td>
-      <td>{rowData.type}</td>
-      <td>{rowData.size}</td>
-      <td>{formatDate(rowData.bloomDate)}</td>
-      <td>{rowData.fragrance}</td>
+      <td>{rowData.category.name}</td>
       <td>{rowData.price}</td>
-      <td>{rowData.quantity}</td>
+      <td>{rowData.stock}</td>
+      <td>{rowData?.brand?.name}</td>
       <td>
         <Flex gap={2} justify='center'>
           <Button

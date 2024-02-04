@@ -15,13 +15,13 @@ export const sidebarItems = [
     icon: React.createElement(ProfileFilled),
   },
   {
-    key: 'Add Flower',
-    label: <NavLink to='/create-product'>ADD FLOWER</NavLink>,
+    key: 'Add Product',
+    label: <NavLink to='/create-product'>ADD PRODUCT</NavLink>,
     icon: React.createElement(AntDesignOutlined),
   },
   {
-    key: 'Manage Flowers',
-    label: <NavLink to='/products'>MANAGE FLOWERS</NavLink>,
+    key: 'Manage Products',
+    label: <NavLink to='/products'>MANAGE PRODUCTS</NavLink>,
     icon: React.createElement(MoneyCollectFilled),
   },
   {

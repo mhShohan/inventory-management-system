@@ -38,7 +38,7 @@ class ProductServices extends BaseServices<any> {
    * Get All product of user
    */
   async readAll(query: Record<string, unknown> = {}, userId: string) {
-    const data = await this.model.aggregate([
+    let data = await this.model.aggregate([
       // ...matchStagePipeline(query, userId),
       {
         $match:
@@ -46,6 +46,7 @@ class ProductServices extends BaseServices<any> {
       },
       ...sortAndPaginatePipeline(query)
     ]);
+
 
     const totalCount = await this.model.aggregate([
       // ...matchStagePipeline(query, userId),
@@ -65,6 +66,9 @@ class ProductServices extends BaseServices<any> {
         }
       }
     ]);
+
+    data = await this.model.populate(data, { path: 'category', select: '-__v -user' })
+    data = await this.model.populate(data, { path: 'brand', select: '-__v -user' })
 
     return { data, totalCount };
   }
