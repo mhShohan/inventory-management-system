@@ -8,10 +8,10 @@ const brandRoutes = Router()
 
 brandRoutes.use(verifyAuth)
 
-brandRoutes.delete('/:id', brandController.delete)
-brandRoutes.patch('/:id', validateRequest(brandValidator.updateSchema), brandController.create)
 brandRoutes.post('/', validateRequest(brandValidator.createSchema), brandController.create)
 brandRoutes.get('/', brandController.getAll)
+brandRoutes.delete('/:id', brandController.delete)
+brandRoutes.patch('/:id', validateRequest(brandValidator.updateSchema), brandController.create)
 
 
 export default brandRoutes

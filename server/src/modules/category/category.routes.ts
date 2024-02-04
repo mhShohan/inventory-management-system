@@ -8,10 +8,10 @@ const categoryRoutes = Router()
 
 categoryRoutes.use(verifyAuth)
 
-categoryRoutes.delete('/:id', categoryController.delete)
-categoryRoutes.patch('/:id', validateRequest(categoryValidator.updateSchema), categoryController.create)
 categoryRoutes.post('/', validateRequest(categoryValidator.createSchema), categoryController.create)
 categoryRoutes.get('/', categoryController.getAll)
+categoryRoutes.delete('/:id', categoryController.delete)
+categoryRoutes.patch('/:id', validateRequest(categoryValidator.updateSchema), categoryController.create)
 
 
 export default categoryRoutes

@@ -2,7 +2,6 @@
 import { Types } from 'mongoose';
 import sortAndPaginatePipeline from '../../lib/sortAndPaginate.pipeline';
 import BaseServices from '../baseServices';
-import matchStagePipeline from './product.aggregation.pipeline';
 import Product from './product.model';
 
 class ProductServices extends BaseServices<any> {
@@ -40,12 +39,20 @@ class ProductServices extends BaseServices<any> {
    */
   async readAll(query: Record<string, unknown> = {}, userId: string) {
     const data = await this.model.aggregate([
-      ...matchStagePipeline(query, userId),
+      // ...matchStagePipeline(query, userId),
+      {
+        $match:
+          { user: new Types.ObjectId(userId) },
+      },
       ...sortAndPaginatePipeline(query)
     ]);
 
     const totalCount = await this.model.aggregate([
-      ...matchStagePipeline(query, userId),
+      // ...matchStagePipeline(query, userId),
+      {
+        $match:
+          { user: new Types.ObjectId(userId) },
+      },
       {
         $group: {
           _id: null,
