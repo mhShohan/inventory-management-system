@@ -11,8 +11,8 @@ const SaleTable = ({ data }: { data: ITableSale[] }) => {
     <table className='custom-table'>
       <thead>
         <tr>
-          <th>Flower Name</th>
-          <th>Flower Price</th>
+          <th>Product Name</th>
+          <th>Product Price</th>
           <th>Buyer Name</th>
           <th>Quantity</th>
           <th>Total Price</th>

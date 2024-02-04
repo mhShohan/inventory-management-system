@@ -31,6 +31,7 @@ const Sidebar = () => {
             setShowLogoutBtn(!collapsed);
           }
         }}
+        width='220px'
         style={{
           backgroundColor: '#164863',
           position: 'relative',

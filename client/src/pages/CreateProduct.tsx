@@ -31,7 +31,6 @@ const CreateProduct = () => {
         reset();
       }
     } catch (error: any) {
-      console.log(error);
       toastMessage({ icon: 'error', text: error.data.message });
     }
   };
@@ -48,7 +47,14 @@ const CreateProduct = () => {
           borderRadius: '.6rem',
         }}
       >
-        <h1 style={{ marginBottom: '.4rem', textAlign: 'center', textTransform: 'uppercase' }}>
+        <h1
+          style={{
+            marginBottom: '.8rem',
+            fontWeight: '900',
+            textAlign: 'center',
+            textTransform: 'uppercase',
+          }}
+        >
           Add New Product
         </h1>
         <form onSubmit={handleSubmit(onSubmit)}>

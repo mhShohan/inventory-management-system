@@ -25,8 +25,8 @@ export const sidebarItems = [
     icon: React.createElement(MoneyCollectFilled),
   },
   {
-    key: 'All Sales',
-    label: <NavLink to='/sales'>ALL SALES</NavLink>,
+    key: 'Manage Sales',
+    label: <NavLink to='/sales'>MANAGE SALES</NavLink>,
     icon: React.createElement(HistoryOutlined),
   },
   {
