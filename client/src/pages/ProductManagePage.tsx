@@ -6,21 +6,24 @@ import CreateVariantModal from '../components/modal/CreateVariant';
 import EditModal from '../components/modal/EditModal';
 import SaleModal from '../components/modal/SaleModal';
 import { useGetAllProductsQuery } from '../redux/features/productApi';
+import { useGetAllCategoriesQuery } from '../redux/features/categoryApi';
+import { useGetAllBrandsQuery } from '../redux/features/brandApi';
 
 const ProductManagePage = () => {
   const limit = 10;
   const [current, setCurrent] = useState(1);
   const [query, setQuery] = useState({
-    size: '',
-    color: '',
-    type: '',
-    bloomDate: '',
+    name: '',
+    category: '',
+    brand: '',
   });
   const { isLoading, data, isFetching } = useGetAllProductsQuery({
     ...query,
     page: current,
     limit,
   });
+  const { data: categories } = useGetAllCategoriesQuery(undefined);
+  const { data: brands } = useGetAllBrandsQuery(undefined);
 
   const onChange: PaginationProps['onChange'] = (page) => {
     setCurrent(page);
@@ -44,8 +47,8 @@ const ProductManagePage = () => {
           <Slider
             range
             step={100}
-            max={5000}
-            defaultValue={[100, 2000]}
+            max={20000}
+            defaultValue={[1000, 5000]}
             onChange={(value) => {
               setQuery((prev) => ({
                 ...prev,
@@ -55,49 +58,44 @@ const ProductManagePage = () => {
             }}
           />
         </Col>
-        <Col xs={{ span: 24 }} lg={{ span: 4 }}>
-          <label style={{ fontWeight: 700 }}>Filter by Bloom Date</label>
-          <input
-            type='date'
-            value={query.bloomDate}
-            className={`input-field`}
-            placeholder='Filter by type'
-            onChange={(e) => setQuery((prev) => ({ ...prev, bloomDate: e.target.value }))}
-          />
-        </Col>
-        <Col xs={{ span: 24 }} lg={{ span: 4 }}>
-          <label style={{ fontWeight: 700 }}>Filter by type</label>
+        <Col xs={{ span: 24 }} lg={{ span: 8 }}>
+          <label style={{ fontWeight: 700 }}>Search by product name</label>
           <input
             type='text'
-            value={query.type}
+            value={query.name}
             className={`input-field`}
-            placeholder='Filter by type'
-            onChange={(e) => setQuery((prev) => ({ ...prev, type: e.target.value }))}
+            placeholder='Search by Product Name'
+            onChange={(e) => setQuery((prev) => ({ ...prev, name: e.target.value }))}
           />
         </Col>
         <Col xs={{ span: 24 }} lg={{ span: 4 }}>
-          <label style={{ fontWeight: 700 }}>Filter by color</label>
-          <input
-            type='text'
-            value={query.color}
-            className={`input-field`}
-            placeholder='Filter by color'
-            onChange={(e) => setQuery((prev) => ({ ...prev, color: e.target.value }))}
-          />
-        </Col>
-        <Col xs={{ span: 24 }} lg={{ span: 4 }}>
-          <label style={{ fontWeight: 700 }}>Filter by Size</label>
+          <label style={{ fontWeight: 700 }}>Filter by Category</label>
           <select
-            name='size'
+            name='category'
             className={`input-field`}
-            defaultValue={query.size}
-            onChange={(e) => setQuery((prev) => ({ ...prev, size: e.target.value }))}
-            onBlur={(e) => setQuery((prev) => ({ ...prev, size: e.target.value }))}
+            defaultValue={query.category}
+            onChange={(e) => setQuery((prev) => ({ ...prev, category: e.target.value }))}
+            onBlur={(e) => setQuery((prev) => ({ ...prev, category: e.target.value }))}
           >
-            <option value=''>Filter by Size*</option>
-            <option value='SMALL'>Small</option>
-            <option value='MEDIUM'>Medium</option>
-            <option value='LARGE'>Large</option>
+            <option value=''>Filter by Category</option>
+            {categories?.data?.map((category: { _id: string; name: string }) => (
+              <option value={category._id}>{category.name}</option>
+            ))}
+          </select>
+        </Col>
+        <Col xs={{ span: 24 }} lg={{ span: 4 }}>
+          <label style={{ fontWeight: 700 }}>Filter by Brand</label>
+          <select
+            name='Brand'
+            className={`input-field`}
+            defaultValue={query.category}
+            onChange={(e) => setQuery((prev) => ({ ...prev, category: e.target.value }))}
+            onBlur={(e) => setQuery((prev) => ({ ...prev, category: e.target.value }))}
+          >
+            <option value=''>Filter by Brand</option>
+            {brands?.data?.map((brand: { _id: string; name: string }) => (
+              <option value={brand._id}>{brand.name}</option>
+            ))}
           </select>
         </Col>
       </Row>
