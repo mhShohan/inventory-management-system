@@ -14,30 +14,30 @@ const matchStagePipeline = (query: Record<string, unknown>, userId: string) => {
   }
 
   const fieldQuery: any = [
-    { quantity: { $gt: 0 } },
     { user: new Types.ObjectId(userId) },
     { price: { $gte: minPrice, $lte: maxPrice } }
   ];
 
-  if (query.bloomDate) {
-    fieldQuery.push({ bloomDate: { $eq: new Date(query.bloomDate as string) } });
+  if (query.name) {
+    fieldQuery.push({ name: { $regex: new RegExp(query.name as string, 'i') } });
   }
 
-  if (query.color) {
-    fieldQuery.push({ color: { $regex: new RegExp(query.color as string, 'i') } });
+  if (query.category) {
+    const isValidId = Types.ObjectId.isValid(query.category as string)
+
+    if (isValidId) {
+      fieldQuery.push({ category: { $eq: new Types.ObjectId(query.category as string) } });
+    }
   }
 
-  if (query.type) {
-    fieldQuery.push({ type: { $regex: new RegExp(query.type as string, 'i') } });
+  if (query.brand) {
+    const isValidId = Types.ObjectId.isValid(query.brand as string)
+
+    if (isValidId) {
+      fieldQuery.push({ brand: { $eq: new Types.ObjectId(query.brand as string) } });
+    }
   }
 
-  if (query.size) {
-    fieldQuery.push({ size: query.size as string });
-  }
-
-  if (query.fragrance) {
-    fieldQuery.push({ fragrance: { $regex: new RegExp(query.fragrance as string, 'i') } });
-  }
 
   return [
     {

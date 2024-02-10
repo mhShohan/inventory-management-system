@@ -33,7 +33,12 @@ class ProductControllers {
       success: true,
       statusCode: httpStatus.OK,
       message: 'All products retrieved successfully',
-      meta: { page, limit, total: result?.totalCount[0]?.total || 0 },
+      meta: {
+        page,
+        limit,
+        total: result?.totalCount[0]?.total || 0,
+        totalPage: Math.ceil(result?.totalCount[0]?.total / page)
+      },
       data: result.data
     });
   });
