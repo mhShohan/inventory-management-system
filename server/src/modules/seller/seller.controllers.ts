@@ -15,7 +15,7 @@ class SellerControllers {
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,
-      message: 'sale created successfully!',
+      message: 'New seller created successfully!',
       data: result
     });
   });
@@ -32,8 +32,13 @@ class SellerControllers {
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'All sales retrieved successfully',
-      meta: { page, limit, total: result?.totalCount[0]?.total || 0 },
+      message: 'All seller retrieved successfully',
+      meta: {
+        page,
+        limit,
+        total: result?.totalCount[0]?.total || 0,
+        totalPage: Math.ceil(result?.totalCount[0]?.total / limit)
+      },
       data: result.data
     });
   });
@@ -48,7 +53,7 @@ class SellerControllers {
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'sale fetched successfully!',
+      message: 'Seller fetched successfully!',
       data: result
     });
   });
@@ -57,22 +62,12 @@ class SellerControllers {
    * update sale
    */
   update = asyncHandler(async (req, res) => {
-    const { price, quantity, ...restPayload } = req.body;
-
-    const sale = await this.services.read(req.params.id, req.user._id);
-
-    const updatedPrice = price || sale.product.price;
-    const updatedQuantity = quantity || sale.quantity;
-
-    restPayload.totalPrice = updatedPrice * updatedQuantity;
-    restPayload.quantity = updatedQuantity;
-
-    const result = await this.services.update(req.params.id, restPayload);
+    const result = await this.services.update(req.params.id, req.body);
 
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'sale updated successfully!',
+      message: 'Seller updated successfully!',
       data: result
     });
   });
@@ -86,7 +81,7 @@ class SellerControllers {
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'sale delete successfully!'
+      message: 'Seller delete successfully!'
     });
   });
 }

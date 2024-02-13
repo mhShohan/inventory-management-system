@@ -5,7 +5,14 @@ interface IResponse<T> {
   success: boolean;
   message: string;
   data?: T;
-  meta?: Record<string, unknown>;
+  meta?: IMeta;
+}
+
+interface IMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPage: number;
 }
 
 const sendResponse = <T>(res: Response, responses: IResponse<T>) => {

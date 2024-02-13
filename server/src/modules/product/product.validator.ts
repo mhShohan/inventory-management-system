@@ -2,8 +2,7 @@ import { z } from 'zod';
 
 const createSchema = z.object({
   name: z.string(),
-  description: z.string().optional(),
-  variant: z.string().optional(),
+  seller: z.string(),
   size: z.enum(['SMALL', 'MEDIUM', 'LARGE']).optional(),
   category: z.string(),
   brand: z.string().optional(),
@@ -13,8 +12,7 @@ const createSchema = z.object({
 
 const updateSchema = z.object({
   name: z.string().optional(),
-  description: z.string().optional(),
-  variant: z.string().optional(),
+  seller: z.string().optional(),
   size: z.enum(['SMALL', 'MEDIUM', 'LARGE']).optional(),
   category: z.string().optional(),
   brand: z.string().optional(),

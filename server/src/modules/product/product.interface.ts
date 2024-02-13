@@ -3,8 +3,7 @@ import { Types } from 'mongoose';
 export interface IProduct {
   user: Types.ObjectId;
   name: string;
-  description?: string
-  variant?: string;
+  seller: Types.ObjectId;
   category: Types.ObjectId;
   brand?: Types.ObjectId;
   size?: string;

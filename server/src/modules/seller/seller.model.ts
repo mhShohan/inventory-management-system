@@ -4,10 +4,9 @@ import { ISeller } from './seller.interface';
 const sellerSchema = new Schema<ISeller>(
   {
     user: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
-    name: { type: String, required: true },
-    amount: { type: Number, required: true },
-    paid: { type: Number, required: true },
-    date: { type: Date, required: true }
+    name: { type: String },
+    email: { type: String, unique: true },
+    contactNo: { type: String, required: true, unique: true },
   },
   { timestamps: true }
 );
