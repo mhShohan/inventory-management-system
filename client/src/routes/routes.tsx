@@ -1,15 +1,16 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Sidebar from '../components/layout/Sidebar';
 import Dashboard from '../pages/Dashboard';
-import LoginPage from '../pages/LoginPage';
+import LoginPage from '../pages/auth/LoginPage';
 import NotFound from '../pages/NotFound';
-import RegisterPage from '../pages/RegisterPage';
+import RegisterPage from '../pages/auth/RegisterPage';
 import ProtectRoute from '../components/layout/ProtectRoute';
 import CreateProduct from '../pages/CreateProduct';
 import ProfilePage from '../pages/ProfilePage';
-import ProductManagePage from '../pages/ProductManagePage';
-import AllSalesPage from '../pages/AllSalesPage';
+import ProductManagePage from '../pages/managements/ProductManagePage';
+import AllSalesPage from '../pages/managements/AllSalesPage';
 import SaleHistoryPage from '../pages/SaleHistoryPage';
+import ManageSeller from '../pages/managements/ManageSeller';
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +54,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectRoute>
             <AllSalesPage />
+          </ProtectRoute>
+        ),
+      },
+      {
+        path: 'sellers',
+        element: (
+          <ProtectRoute>
+            <ManageSeller />
           </ProtectRoute>
         ),
       },

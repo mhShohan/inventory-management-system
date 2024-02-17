@@ -1,13 +1,13 @@
 import { Col, Flex, Pagination, PaginationProps, Row, Slider } from 'antd';
 import { useState } from 'react';
-import Loader from '../components/Loader';
-import Table from '../components/Table';
-import CreateVariantModal from '../components/modal/CreateVariant';
-import EditModal from '../components/modal/EditModal';
-import SaleModal from '../components/modal/SaleModal';
-import { useGetAllProductsQuery } from '../redux/features/productApi';
-import { useGetAllCategoriesQuery } from '../redux/features/categoryApi';
-import { useGetAllBrandsQuery } from '../redux/features/brandApi';
+import Loader from '../../components/Loader';
+import Table from '../../components/tables/Table';
+import CreateVariantModal from '../../components/modal/CreateVariant';
+import EditModal from '../../components/modal/EditModal';
+import SaleModal from '../../components/modal/SaleModal';
+import { useGetAllProductsQuery } from '../../redux/features/productApi';
+import { useGetAllCategoriesQuery } from '../../redux/features/categoryApi';
+import { useGetAllBrandsQuery } from '../../redux/features/brandApi';
 
 const ProductManagePage = () => {
   const limit = 10;

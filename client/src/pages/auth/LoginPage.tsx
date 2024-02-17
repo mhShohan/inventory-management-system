@@ -1,12 +1,12 @@
 import { Button, Flex } from 'antd';
 import { FieldValues, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { useLoginMutation } from '../redux/features/authApi';
-import toastMessage from '../lib/toastMessage';
-import decodeToken from '../utils/decodeToken';
-import { useAppDispatch } from '../redux/hooks';
-import { loginUser } from '../redux/services/authSlice';
-import Loader from '../components/Loader';
+import { useLoginMutation } from '../../redux/features/authApi';
+import toastMessage from '../../lib/toastMessage';
+import decodeToken from '../../utils/decodeToken';
+import { useAppDispatch } from '../../redux/hooks';
+import { loginUser } from '../../redux/services/authSlice';
+import Loader from '../../components/Loader';
 
 const LoginPage = () => {
   const [userLogin, { isLoading }] = useLoginMutation();

@@ -8,7 +8,7 @@ import {
   getUpdateModalData,
   toggleUpdateModel,
 } from '../../redux/services/modal.Slice';
-import { IProduct } from '../../types/prduct.types';
+import { IProduct } from '../../types/product.types';
 import ModalInput from './ModalInput';
 
 const EditModal = () => {

@@ -101,6 +101,7 @@ class ProductServices extends BaseServices<any> {
 
     data = await this.model.populate(data, { path: 'category', select: '-__v -user' })
     data = await this.model.populate(data, { path: 'brand', select: '-__v -user' })
+    data = await this.model.populate(data, { path: 'seller', select: '-__v -user -createdAt -updatedAt' })
 
     return { data, totalCount };
   }

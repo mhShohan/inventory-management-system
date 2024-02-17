@@ -10,7 +10,7 @@ class UserServices {
 
   // register new user
   async getSelf(userId: string) {
-    return await this.model.findById(userId);
+    return this.model.findById(userId);
   }
   // register new user
   async register(payload: IUser) {

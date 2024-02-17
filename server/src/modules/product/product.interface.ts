@@ -9,4 +9,5 @@ export interface IProduct {
   size?: string;
   price: number;
   stock: number;
+  description: string
 }

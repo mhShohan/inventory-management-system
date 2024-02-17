@@ -1,9 +1,9 @@
 import { DeleteFilled, EditFilled } from '@ant-design/icons';
-import { Button, Flex } from 'antd';
+import { Button, Flex, Tag } from 'antd';
 import { ChangeEvent, useState } from 'react';
 import Swal from 'sweetalert2';
-import { useBulkDeleteMutation, useDeleteProductMutation } from '../redux/features/productApi';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useBulkDeleteMutation, useDeleteProductMutation } from '../../redux/features/productApi';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
   addAllToBulkDelete,
   addToBulkDelete,
@@ -13,9 +13,9 @@ import {
   toggleCreateVariantModel,
   toggleSaleModel,
   toggleUpdateModel,
-} from '../redux/services/modal.Slice';
-import { IProduct } from '../types/prduct.types';
-import toastMessage from '../lib/toastMessage';
+} from '../../redux/services/modal.Slice';
+import { IProduct } from '../../types/product.types';
+import toastMessage from '../../lib/toastMessage';
 
 const Table = ({ data }: { data: IProduct[] }) => {
   const dispatch = useAppDispatch();
@@ -79,6 +79,7 @@ const Table = ({ data }: { data: IProduct[] }) => {
             <th>Price</th>
             <th>Stock</th>
             <th>Brand</th>
+            <th>Seller</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -128,8 +129,6 @@ const SingleRow = ({ rowData }: { rowData: IProduct }) => {
     }
   };
 
-  console.log(rowData);
-
   return (
     <tr>
       <td>
@@ -144,6 +143,9 @@ const SingleRow = ({ rowData }: { rowData: IProduct }) => {
       <td>{rowData.price}</td>
       <td>{rowData.stock}</td>
       <td>{rowData?.brand?.name}</td>
+      <td>
+        <Tag>{rowData?.seller?.name}</Tag>
+      </td>
       <td>
         <Flex gap={2} justify='center'>
           <Button
@@ -169,7 +171,7 @@ const SingleRow = ({ rowData }: { rowData: IProduct }) => {
             onClick={() => dispatch(toggleCreateVariantModel({ open: true, data: rowData }))}
             style={{ padding: '0 .5rem', fontWeight: 600, backgroundColor: 'blue' }}
           >
-            Create Variant
+            Add Stock
           </Button>
 
           <Button

@@ -7,7 +7,7 @@ import {
   getCreateVariantModelData,
   toggleCreateVariantModel,
 } from '../../redux/services/modal.Slice';
-import { IProduct } from '../../types/prduct.types';
+import { IProduct } from '../../types/product.types';
 import ModalInput from './ModalInput';
 import { useCreateNewProductMutation } from '../../redux/features/productApi';
 

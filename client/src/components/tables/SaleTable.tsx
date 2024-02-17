@@ -1,10 +1,10 @@
 import { DeleteFilled, EditFilled } from '@ant-design/icons';
 import { Button, Flex } from 'antd';
 import Swal from 'sweetalert2';
-import { ITableSale } from '../types/sale.type';
-import formatDate from '../utils/formatDate';
-import { useDeleteSaleMutation, useUpdateSaleMutation } from '../redux/features/saleApi';
-import toastMessage from '../lib/toastMessage';
+import { ITableSale } from '../../types/sale.type';
+import formatDate from '../../utils/formatDate';
+import { useDeleteSaleMutation, useUpdateSaleMutation } from '../../redux/features/saleApi';
+import toastMessage from '../../lib/toastMessage';
 
 const SaleTable = ({ data }: { data: ITableSale[] }) => {
   return (

@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import Loader from '../components/Loader';
-import SaleHistoryTable from '../components/SaleHistoryTable';
+import SaleHistoryTable from '../components/tables/SaleHistoryTable';
 import {
   useDailySaleQuery,
   useMonthlySaleQuery,

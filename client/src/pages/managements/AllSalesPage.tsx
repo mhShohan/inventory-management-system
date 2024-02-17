@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import Loader from '../components/Loader';
-import SaleTable from '../components/SaleTable';
-import { useGetAllSaleQuery } from '../redux/features/saleApi';
+import Loader from '../../components/Loader';
+import SaleTable from '../../components/tables/SaleTable';
+import { useGetAllSaleQuery } from '../../redux/features/saleApi';
 import { Flex, Pagination, PaginationProps } from 'antd';
 
 const AllSalesPage = () => {

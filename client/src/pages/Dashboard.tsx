@@ -10,28 +10,34 @@ const Dashboard = () => {
   if (isLoading && isLoading1) return <Loader />;
   else
     return (
-      <Row gutter={0}>
-        <Col xs={{ span: 23 }} lg={{ span: 7 }} className='number-card'>
-          <h3>Total Stock (Flowers)</h3>
-          <h1>{products?.data?.totalQuantity || 0}</h1>
+      <Row style={{ paddingRight: '1rem' }}>
+        <Col xs={{ span: 24 }} lg={{ span: 8 }} style={{ padding: '.5rem' }}>
+          <div className='number-card'>
+            <h3>Total Stock (Flowers)</h3>
+            <h1>{products?.data?.totalQuantity || 0}</h1>
+          </div>
         </Col>
-        <Col xs={{ span: 23 }} lg={{ span: 7 }} className='number-card'>
-          <h3>Total Sell (Flowers)</h3>
-          <h1>
-            {yearlyData?.data.reduce(
-              (acc: number, cur: { totalQuantity: number }) => (acc += cur.totalQuantity),
-              0
-            )}
-          </h1>
+        <Col xs={{ span: 24 }} lg={{ span: 8 }} style={{ padding: '.5rem' }}>
+          <div className='number-card'>
+            <h3>Total Sell (Flowers)</h3>
+            <h1>
+              {yearlyData?.data.reduce(
+                (acc: number, cur: { totalQuantity: number }) => (acc += cur.totalQuantity),
+                0
+              )}
+            </h1>
+          </div>
         </Col>
-        <Col xs={{ span: 23 }} lg={{ span: 7 }} className='number-card'>
-          <h3>Total Revenue</h3>
-          <h1>
-            {yearlyData?.data.reduce(
-              (acc: number, cur: { totalRevenue: number }) => (acc += cur.totalRevenue),
-              0
-            )}
-          </h1>
+        <Col xs={{ span: 24 }} lg={{ span: 8 }} style={{ padding: '.5rem' }}>
+          <div className='number-card'>
+            <h3>Total Revenue</h3>
+            <h1>
+              {yearlyData?.data.reduce(
+                (acc: number, cur: { totalRevenue: number }) => (acc += cur.totalRevenue),
+                0
+              )}
+            </h1>
+          </div>
         </Col>
       </Row>
     );

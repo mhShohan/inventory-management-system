@@ -1,5 +1,5 @@
-import generateDate from '../utils/generateDate';
-import generateId from '../utils/generateId';
+import generateDate from '../../utils/generateDate';
+import generateId from '../../utils/generateId';
 
 interface IData {
   day?: number;

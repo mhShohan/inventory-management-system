@@ -7,10 +7,14 @@ export type IProduct = {
   price: number
   size?: string
   stock: number
-  variant?: string
-  createdAt: string
-  updatedAt: string
-  __v: number
+  seller: ISeller
+}
+
+export interface ISeller {
+  _id: string
+  name: string
+  email: string
+  contactNo: string
 }
 
 export interface ICategory {
