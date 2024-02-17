@@ -11,7 +11,7 @@ import { IProduct } from '../../types/product.types';
 import ModalInput from './ModalInput';
 import { useCreateNewProductMutation } from '../../redux/features/productApi';
 
-const CreateVariantModal = () => {
+const AddStockModal = () => {
   const modalOpen = useAppSelector(getCreateVariantModel);
   const data = useAppSelector(getCreateVariantModelData);
   const [createVariant] = useCreateNewProductMutation();
@@ -25,14 +25,12 @@ const CreateVariantModal = () => {
   const onSubmit = async () => {
     const payload: any = { ...updateDate };
     payload.price = Number(updateDate?.price);
-    payload.quantity = Number(updateDate?.quantity);
+    payload.stock = Number(updateDate?.stock);
     delete payload?._id;
     delete payload.createdAt;
     delete payload?.updatedAt;
     delete payload?.__v;
     delete payload?.user;
-
-    console.log(payload);
 
     try {
       const res = await createVariant(payload).unwrap();
@@ -54,7 +52,7 @@ const CreateVariantModal = () => {
   return (
     <>
       <Modal
-        title='Create an new variant of Product'
+        title='Add Stock'
         centered
         open={modalOpen}
         onOk={() => dispatch(toggleCreateVariantModel({ open: false, data: null }))}
@@ -77,18 +75,6 @@ const CreateVariantModal = () => {
           />
           <ModalInput
             handleChange={handleChange}
-            defaultValue={updateDate?.color}
-            label='Color'
-            name='color'
-          />
-          <ModalInput
-            handleChange={handleChange}
-            defaultValue={updateDate?.type}
-            label='Type'
-            name='type'
-          />
-          <ModalInput
-            handleChange={handleChange}
             label='Price'
             type='number'
             defaultValue={updateDate?.price}
@@ -99,20 +85,7 @@ const CreateVariantModal = () => {
             label='Quantity'
             type='number'
             name='quantity'
-            defaultValue={updateDate?.quantity}
-          />
-          <ModalInput
-            handleChange={handleChange}
-            label='Fragrance'
-            defaultValue={updateDate?.fragrance}
-            name='fragrance'
-          />
-          <ModalInput
-            handleChange={handleChange}
-            label='BloomDate'
-            type='date'
-            name='bloomDate'
-            defaultValue={updateDate?.bloomDate}
+            defaultValue={updateDate?.stock}
           />
           <Row>
             <Col span={6}>
@@ -145,4 +118,4 @@ const CreateVariantModal = () => {
   );
 };
 
-export default CreateVariantModal;
+export default AddStockModal;

@@ -13,13 +13,13 @@ const Dashboard = () => {
       <Row style={{ paddingRight: '1rem' }}>
         <Col xs={{ span: 24 }} lg={{ span: 8 }} style={{ padding: '.5rem' }}>
           <div className='number-card'>
-            <h3>Total Stock (Flowers)</h3>
+            <h3>Total Stock</h3>
             <h1>{products?.data?.totalQuantity || 0}</h1>
           </div>
         </Col>
         <Col xs={{ span: 24 }} lg={{ span: 8 }} style={{ padding: '.5rem' }}>
           <div className='number-card'>
-            <h3>Total Sell (Flowers)</h3>
+            <h3>Total Item Sell </h3>
             <h1>
               {yearlyData?.data.reduce(
                 (acc: number, cur: { totalQuantity: number }) => (acc += cur.totalQuantity),

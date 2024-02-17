@@ -79,7 +79,7 @@ const Table = ({ data }: { data: IProduct[] }) => {
             <th>Price</th>
             <th>Stock</th>
             <th>Brand</th>
-            <th>Seller</th>
+            <th>Purchase From</th>
             <th>Actions</th>
           </tr>
         </thead>

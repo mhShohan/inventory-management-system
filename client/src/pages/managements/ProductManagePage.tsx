@@ -1,8 +1,8 @@
 import { Col, Flex, Pagination, PaginationProps, Row, Slider } from 'antd';
 import { useState } from 'react';
 import Loader from '../../components/Loader';
-import Table from '../../components/tables/Table';
-import CreateVariantModal from '../../components/modal/CreateVariant';
+import Table from '../../components/tables/ProductTable';
+import AddStockModal from '../../components/modal/AddStock';
 import EditModal from '../../components/modal/EditModal';
 import SaleModal from '../../components/modal/SaleModal';
 import { useGetAllProductsQuery } from '../../redux/features/productApi';
@@ -115,7 +115,7 @@ const ProductManagePage = () => {
       </Flex>
       <EditModal />
       <SaleModal />
-      <CreateVariantModal />
+      <AddStockModal />
     </Flex>
   );
 };

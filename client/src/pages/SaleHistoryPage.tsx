@@ -37,38 +37,47 @@ const SaleHistoryPage = () => {
         style={{
           maxHeight: 'calc(100vh - 5rem)',
           overflow: 'auto',
+          paddingRight: '.5rem',
         }}
       >
-        {isFetching1 ? (
+        {isLoading1 ? (
           <Loader />
         ) : (
-          <Col xs={{ span: 23 }} lg={{ span: 11 }} className='sales'>
-            <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Yearly Sale</h1>
-            {yearlyData?.data && <SaleHistoryTable data={yearlyData?.data} />}
+          <Col xs={{ span: 24 }} lg={{ span: 12 }} style={{ padding: '.2rem' }}>
+            <div className='sales'>
+              <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Yearly Sale</h1>
+              {yearlyData?.data && <SaleHistoryTable data={yearlyData?.data} />}
+            </div>
           </Col>
         )}
         {isFetching2 ? (
           <Loader />
         ) : (
-          <Col xs={{ span: 23 }} lg={{ span: 11 }} className='sales'>
-            <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Monthly Sale</h1>
-            {monthlyData?.data && <SaleHistoryTable data={monthlyData?.data} />}
+          <Col xs={{ span: 24 }} lg={{ span: 12 }} style={{ padding: '.2rem' }}>
+            <div className='sales'>
+              <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Monthly Sale</h1>
+              {monthlyData?.data && <SaleHistoryTable data={monthlyData?.data} />}
+            </div>
           </Col>
         )}
         {isFetching3 ? (
           <Loader />
         ) : (
-          <Col xs={{ span: 23 }} lg={{ span: 11 }} className='sales'>
-            <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Weekly Sale</h1>
-            {weeklySale?.data && <SaleHistoryTable data={weeklySale?.data} />}
+          <Col xs={{ span: 24 }} lg={{ span: 12 }} style={{ padding: '.2rem' }}>
+            <div className='sales'>
+              <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Weekly Sale</h1>
+              {weeklySale?.data && <SaleHistoryTable data={weeklySale?.data} />}
+            </div>
           </Col>
         )}
         {isFetching4 ? (
           <Loader />
         ) : (
-          <Col xs={{ span: 23 }} lg={{ span: 11 }} className='sales'>
-            <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Daily Sale</h1>
-            {dailySale?.data && <SaleHistoryTable data={dailySale?.data} />}
+          <Col xs={{ span: 24 }} lg={{ span: 12 }} style={{ padding: '.2rem' }}>
+            <div className='sales'>
+              <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Daily Sale</h1>
+              {dailySale?.data && <SaleHistoryTable data={dailySale?.data} />}
+            </div>
           </Col>
         )}
       </Row>

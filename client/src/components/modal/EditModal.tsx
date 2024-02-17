@@ -25,7 +25,7 @@ const EditModal = () => {
   const onSubmit = async () => {
     const payload = { ...updateDate };
     payload.price = Number(updateDate?.price);
-    payload.quantity = Number(updateDate?.quantity);
+    payload.stock = Number(updateDate?.stock);
 
     try {
       const res = await updateProduct({ id: updateDate?._id, payload }).unwrap();
@@ -69,42 +69,10 @@ const EditModal = () => {
           />
           <ModalInput
             handleChange={handleChange}
-            defaultValue={updateDate?.color}
-            label='Color'
-            name='color'
-          />
-          <ModalInput
-            handleChange={handleChange}
-            defaultValue={updateDate?.type}
-            label='Type'
-            name='type'
-          />
-          <ModalInput
-            handleChange={handleChange}
             label='Price'
             type='number'
             defaultValue={updateDate?.price}
             name='price'
-          />
-          <ModalInput
-            handleChange={handleChange}
-            label='Quantity'
-            type='number'
-            name='quantity'
-            defaultValue={updateDate?.quantity}
-          />
-          <ModalInput
-            handleChange={handleChange}
-            label='Fragrance'
-            defaultValue={updateDate?.fragrance}
-            name='fragrance'
-          />
-          <ModalInput
-            handleChange={handleChange}
-            label='BloomDate'
-            type='date'
-            name='bloomDate'
-            defaultValue={updateDate?.bloomDate}
           />
           <Row>
             <Col span={6}>

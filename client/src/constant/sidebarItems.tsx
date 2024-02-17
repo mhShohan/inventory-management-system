@@ -35,6 +35,11 @@ export const sidebarItems = [
     icon: React.createElement(HistoryOutlined),
   },
   {
+    key: 'Manage Purchase',
+    label: <NavLink to='/purchases'>MANAGE PURCHASES</NavLink>,
+    icon: React.createElement(HistoryOutlined),
+  },
+  {
     key: 'Sales History',
     label: <NavLink to='/sales-history'>SALES HISTORY</NavLink>,
     icon: React.createElement(HistoryOutlined),

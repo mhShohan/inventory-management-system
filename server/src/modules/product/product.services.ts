@@ -62,7 +62,7 @@ class ProductServices extends BaseServices<any> {
       {
         $group: {
           _id: null,
-          totalQuantity: { $sum: '$quantity' }
+          totalQuantity: { $sum: '$stock' }
         }
       },
       {

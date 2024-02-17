@@ -185,7 +185,7 @@ const CreateProduct = () => {
                   type='primary'
                   style={{ textTransform: 'uppercase', fontWeight: 'bold' }}
                 >
-                  Create Product
+                  Add Product
                 </Button>
               </Flex>
             </form>
