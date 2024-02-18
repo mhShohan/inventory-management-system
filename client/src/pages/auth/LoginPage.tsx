@@ -7,6 +7,7 @@ import decodeToken from '../../utils/decodeToken';
 import { useAppDispatch } from '../../redux/hooks';
 import { loginUser } from '../../redux/services/authSlice';
 import Loader from '../../components/Loader';
+import { toast } from 'sonner';
 
 const LoginPage = () => {
   const [userLogin, { isLoading }] = useLoginMutation();
@@ -24,6 +25,7 @@ const LoginPage = () => {
   });
 
   const onSubmit = async (data: FieldValues) => {
+    const toastId = toast.loading('Logging...');
     try {
       const res = await userLogin(data).unwrap();
 
@@ -31,7 +33,7 @@ const LoginPage = () => {
         const user = decodeToken(res.data.token);
         dispatch(loginUser({ token: res.data.token, user }));
         navigate('/');
-        toastMessage({ icon: 'success', text: res.message });
+        toast.success('Successfully Login!', { id: toastId });
       }
     } catch (error: any) {
       console.log(error);

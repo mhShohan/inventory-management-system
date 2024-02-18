@@ -6,6 +6,7 @@ import { useRegisterMutation } from '../../redux/features/authApi';
 import { useAppDispatch } from '../../redux/hooks';
 import { loginUser } from '../../redux/services/authSlice';
 import decodeToken from '../../utils/decodeToken';
+import { toast } from 'sonner';
 
 const RegisterPage = () => {
   const dispatch = useAppDispatch();
@@ -18,6 +19,7 @@ const RegisterPage = () => {
   } = useForm();
 
   const onSubmit = async (data: FieldValues) => {
+    const toastId = toast.loading('Registering new account!');
     try {
       const res = await userRegistration(data).unwrap();
 
@@ -29,7 +31,7 @@ const RegisterPage = () => {
         const user = decodeToken(res.data.token);
         dispatch(loginUser({ token: res.data.token, user }));
         navigate('/');
-        toastMessage({ icon: 'success', text: res.message });
+        toast.success(res.message, { id: toastId });
       }
     } catch (error: any) {
       toastMessage({ icon: 'error', text: error.data.message });
