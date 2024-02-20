@@ -1,123 +1,258 @@
-import { Col, Flex, Pagination, PaginationProps, Row, Slider } from 'antd';
+import { DeleteFilled, EditFilled } from '@ant-design/icons';
+import type { PaginationProps, TableColumnsType } from 'antd';
+import { Button, Flex, Modal, Pagination, Table, Tag } from 'antd';
 import { useState } from 'react';
-import Loader from '../../components/Loader';
-import Table from '../../components/tables/ProductTable';
-import AddStockModal from '../../components/modal/AddStock';
-import EditModal from '../../components/modal/EditModal';
-import SaleModal from '../../components/modal/SaleModal';
+import { FieldValues, useForm } from 'react-hook-form';
 import { useGetAllProductsQuery } from '../../redux/features/productApi';
-import { useGetAllCategoriesQuery } from '../../redux/features/categoryApi';
-import { useGetAllBrandsQuery } from '../../redux/features/brandApi';
+import { IProduct } from '../../types/product.types';
+import ProductManagementFilter from '../../components/query-filters/ProductManagementFilter';
 
-const ProductManagePage = () => {
-  const limit = 10;
+const NewProductManagePage = () => {
   const [current, setCurrent] = useState(1);
   const [query, setQuery] = useState({
     name: '',
     category: '',
     brand: '',
+    limit: 10,
   });
-  const { isLoading, data, isFetching } = useGetAllProductsQuery({
-    ...query,
-    page: current,
-    limit,
-  });
-  const { data: categories } = useGetAllCategoriesQuery(undefined);
-  const { data: brands } = useGetAllBrandsQuery(undefined);
+
+  const { data: products, isFetching } = useGetAllProductsQuery(query);
 
   const onChange: PaginationProps['onChange'] = (page) => {
     setCurrent(page);
   };
 
-  if (isLoading) return <Loader />;
+  const tableData = products?.data?.map((product: IProduct) => ({
+    key: product._id,
+    name: product.name,
+    category: product.category,
+    categoryName: product.category.name,
+    price: product.price,
+    stock: product.stock,
+    seller: product.seller,
+    sellerName: product.seller.name,
+    brand: product.brand,
+    size: product.size,
+    description: product.description,
+  }));
+
+  const columns: TableColumnsType<any> = [
+    {
+      title: 'Product Name',
+      key: 'name',
+      dataIndex: 'name',
+    },
+    {
+      title: 'Category',
+      key: 'categoryName',
+      dataIndex: 'categoryName',
+      align: 'center',
+    },
+    {
+      title: 'price',
+      key: 'price',
+      dataIndex: 'price',
+      align: 'center',
+    },
+    {
+      title: 'stock',
+      key: 'stock',
+      dataIndex: 'stock',
+      align: 'center',
+    },
+    {
+      title: 'Purchase From',
+      key: 'sellerName',
+      dataIndex: 'sellerName',
+      align: 'center',
+      render: (sellerName: string) => <Tag>{sellerName}</Tag>,
+    },
+    {
+      title: 'Action',
+      key: 'x',
+      align: 'center',
+      render: (item) => {
+        return (
+          <div style={{ display: 'flex' }}>
+            <SellProductModal product={item} />
+            <AddStockModal product={item} />
+            <UpdateProductModal product={item} />
+            <DeleteProductModal />
+          </div>
+        );
+      },
+      width: '1%',
+    },
+  ];
 
   return (
-    <Flex
-      vertical
-      justify='space-between'
-      style={{
-        maxHeight: 'calc(100vh - 5rem)',
-        overflow: 'auto',
-        padding: '1rem',
-      }}
-    >
-      <Row gutter={2} style={{ marginBottom: '1rem' }}>
-        <Col xs={{ span: 24 }} lg={{ span: 8 }}>
-          <label style={{ fontWeight: 700 }}>Price Range</label>
-          <Slider
-            range
-            step={100}
-            max={20000}
-            defaultValue={[1000, 5000]}
-            onChange={(value) => {
-              setQuery((prev) => ({
-                ...prev,
-                minPrice: value[0],
-                maxPrice: value[1],
-              }));
-            }}
-          />
-        </Col>
-        <Col xs={{ span: 24 }} lg={{ span: 8 }}>
-          <label style={{ fontWeight: 700 }}>Search by product name</label>
-          <input
-            type='text'
-            value={query.name}
-            className={`input-field`}
-            placeholder='Search by Product Name'
-            onChange={(e) => setQuery((prev) => ({ ...prev, name: e.target.value }))}
-          />
-        </Col>
-        <Col xs={{ span: 24 }} lg={{ span: 4 }}>
-          <label style={{ fontWeight: 700 }}>Filter by Category</label>
-          <select
-            name='category'
-            className={`input-field`}
-            defaultValue={query.category}
-            onChange={(e) => setQuery((prev) => ({ ...prev, category: e.target.value }))}
-            onBlur={(e) => setQuery((prev) => ({ ...prev, category: e.target.value }))}
-          >
-            <option value=''>Filter by Category</option>
-            {categories?.data?.map((category: { _id: string; name: string }) => (
-              <option value={category._id}>{category.name}</option>
-            ))}
-          </select>
-        </Col>
-        <Col xs={{ span: 24 }} lg={{ span: 4 }}>
-          <label style={{ fontWeight: 700 }}>Filter by Brand</label>
-          <select
-            name='Brand'
-            className={`input-field`}
-            defaultValue={query.category}
-            onChange={(e) => setQuery((prev) => ({ ...prev, category: e.target.value }))}
-            onBlur={(e) => setQuery((prev) => ({ ...prev, category: e.target.value }))}
-          >
-            <option value=''>Filter by Brand</option>
-            {brands?.data?.map((brand: { _id: string; name: string }) => (
-              <option value={brand._id}>{brand.name}</option>
-            ))}
-          </select>
-        </Col>
-      </Row>
-      <div style={{ width: '100%', overflow: 'auto' }}>
-        {isFetching ? <Loader /> : <Table data={data?.data} />}
-        {data?.data <= 0 && (
-          <h1 style={{ textAlign: 'center', margin: '3rem', color: 'red' }}>No Product found!</h1>
-        )}
-      </div>
+    <>
+      <ProductManagementFilter query={query} setQuery={setQuery} />
+      <Table
+        size='small'
+        loading={isFetching}
+        columns={columns}
+        dataSource={tableData}
+        pagination={false}
+      />
       <Flex justify='center' style={{ marginTop: '1rem' }}>
         <Pagination
           current={current}
           onChange={onChange}
-          defaultPageSize={limit}
-          total={data?.meta?.total}
+          defaultPageSize={query.limit}
+          total={products?.meta?.total}
         />
       </Flex>
-      <EditModal />
-      <SaleModal />
-      <AddStockModal />
-    </Flex>
+    </>
   );
 };
 
-export default ProductManagePage;
+/**
+ * Sell Product Modal
+ */
+const SellProductModal = ({ product }: { product: IProduct }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { handleSubmit } = useForm();
+
+  const onSubmit = (data: FieldValues) => {
+    console.log(data);
+  };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <Button
+        onClick={showModal}
+        type='primary'
+        className='table-btn'
+        style={{ backgroundColor: 'royalblue' }}
+      >
+        Sell
+      </Button>
+      <Modal title='Sell Product' open={isModalOpen} onCancel={handleCancel} footer={null}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Button htmlType='submit'>Submit</Button>
+        </form>
+      </Modal>
+    </>
+  );
+};
+
+/**
+ * Add Stock Modal
+ */
+const AddStockModal = ({ product }: { product: IProduct }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { handleSubmit } = useForm();
+
+  const onSubmit = (data: FieldValues) => {
+    console.log(data);
+  };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <Button
+        onClick={showModal}
+        type='primary'
+        className='table-btn'
+        style={{ backgroundColor: 'blue' }}
+      >
+        Add Stock
+      </Button>
+      <Modal title='Update Product Info' open={isModalOpen} onCancel={handleCancel} footer={null}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Button htmlType='submit'>Submit</Button>
+        </form>
+      </Modal>
+    </>
+  );
+};
+
+/**
+ * Update Product Modal
+ */
+const UpdateProductModal = ({ product }: { product: IProduct }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { handleSubmit } = useForm();
+
+  const onSubmit = (data: FieldValues) => {
+    console.log(data);
+  };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <Button
+        onClick={showModal}
+        type='primary'
+        className='table-btn-small'
+        style={{ backgroundColor: 'green' }}
+      >
+        <EditFilled />
+      </Button>
+      <Modal title='Update Product Info' open={isModalOpen} onCancel={handleCancel} footer={null}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Button htmlType='submit'>Submit</Button>
+        </form>
+      </Modal>
+    </>
+  );
+};
+
+/**
+ * Delete Product Modal
+ */
+const DeleteProductModal = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <Button
+        onClick={showModal}
+        type='primary'
+        className='table-btn-small'
+        style={{ backgroundColor: 'red' }}
+      >
+        <DeleteFilled />
+      </Button>
+      <Modal
+        title='Delete Product'
+        open={isModalOpen}
+        onCancel={handleCancel}
+        footer={null}
+      ></Modal>
+    </>
+  );
+};
+
+export default NewProductManagePage;

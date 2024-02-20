@@ -1,17 +1,17 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Sidebar from '../components/layout/Sidebar';
-import Dashboard from '../pages/Dashboard';
-import LoginPage from '../pages/auth/LoginPage';
-import NotFound from '../pages/NotFound';
-import RegisterPage from '../pages/auth/RegisterPage';
 import ProtectRoute from '../components/layout/ProtectRoute';
+import Sidebar from '../components/layout/Sidebar';
 import CreateProduct from '../pages/CreateProduct';
+import Dashboard from '../pages/Dashboard';
+import NotFound from '../pages/NotFound';
 import ProfilePage from '../pages/ProfilePage';
-import ProductManagePage from '../pages/managements/ProductManagePage';
-import AllSalesPage from '../pages/managements/AllSalesPage';
 import SaleHistoryPage from '../pages/SaleHistoryPage';
-import ManageSeller from '../pages/managements/ManageSeller';
+import LoginPage from '../pages/auth/LoginPage';
+import RegisterPage from '../pages/auth/RegisterPage';
+import AllSalesPage from '../pages/managements/AllSalesPage';
 import ManagePurchase from '../pages/managements/ManagePurchase';
+import ManageSeller from '../pages/managements/ManageSeller';
+import ProductManagePage from '../pages/managements/ProductManagePage';
 
 export const router = createBrowserRouter([
   {

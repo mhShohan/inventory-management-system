@@ -145,3 +145,19 @@ li.ant-menu-item {
   background-color: gray !important;
   color: #e0e0e0;
 }
+
+.table-btn-small {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  padding: 0;
+  margin-right: .2rem;
+}
+
+.table-btn {
+  border-radius: 6px;
+  height: 30px;
+  padding: 0 .5rem;
+  margin-right: .2rem;
+  font-weight: 600;
+}
