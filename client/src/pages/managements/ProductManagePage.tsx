@@ -174,7 +174,7 @@ const AddStockModal = ({ product }: { product: IProduct }) => {
       >
         Add Stock
       </Button>
-      <Modal title='Update Product Info' open={isModalOpen} onCancel={handleCancel} footer={null}>
+      <Modal title='Add Product to Stock' open={isModalOpen} onCancel={handleCancel} footer={null}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Button htmlType='submit'>Submit</Button>
         </form>

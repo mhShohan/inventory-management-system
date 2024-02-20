@@ -83,7 +83,7 @@ const Sidebar = () => {
           <div
             style={{
               padding: '1rem',
-              minHeight: 'calc(100vh - 5rem)',
+              minHeight: 'calc(100vh - 4rem)',
               background: '#fff',
               borderRadius: '1rem',
             }}

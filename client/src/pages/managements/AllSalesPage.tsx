@@ -1,21 +1,16 @@
-import { useEffect, useState } from 'react';
+import { Flex, Pagination, PaginationProps } from 'antd';
+import { useState } from 'react';
 import Loader from '../../components/Loader';
 import SaleTable from '../../components/tables/SaleTable';
 import { useGetAllSaleQuery } from '../../redux/features/saleApi';
-import { Flex, Pagination, PaginationProps } from 'antd';
 
 const AllSalesPage = () => {
-  const limit = 10;
-  const [current, setCurrent] = useState(1);
-  const { isLoading, data, refetch } = useGetAllSaleQuery({ page: current, limit });
+  const [query, setQuery] = useState({ page: 1, limit: 10 });
+  const { isLoading, data } = useGetAllSaleQuery(query);
 
   const onChange: PaginationProps['onChange'] = (page) => {
-    setCurrent(page);
+    setQuery((prev) => ({ ...prev, limit: page }));
   };
-
-  useEffect(() => {
-    refetch();
-  }, [current]);
 
   if (isLoading) return <Loader />;
   else
@@ -27,9 +22,9 @@ const AllSalesPage = () => {
         )}
         <Flex justify='center' style={{ marginTop: '1rem' }}>
           <Pagination
-            current={current}
+            current={query.page}
             onChange={onChange}
-            defaultPageSize={limit}
+            defaultPageSize={query.limit}
             total={data?.meta?.total}
           />
         </Flex>
