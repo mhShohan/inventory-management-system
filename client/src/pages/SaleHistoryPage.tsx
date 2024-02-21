@@ -1,6 +1,5 @@
 import { Col, Row } from 'antd';
-import Loader from '../components/Loader';
-import SaleHistoryTable from '../components/tables/SaleHistoryTable';
+import HistoryTable from '../components/tables/HistoryTable';
 import {
   useDailySaleQuery,
   useMonthlySaleQuery,
@@ -9,79 +8,45 @@ import {
 } from '../redux/features/saleApi';
 
 const SaleHistoryPage = () => {
-  const {
-    data: yearlyData,
-    isLoading: isLoading1,
-    isFetching: isFetching1,
-  } = useYearlySaleQuery(undefined);
-  const {
-    data: monthlyData,
-    isLoading: isLoading2,
-    isFetching: isFetching2,
-  } = useMonthlySaleQuery(undefined);
-  const {
-    data: dailySale,
-    isLoading: isLoading3,
-    isFetching: isFetching3,
-  } = useDailySaleQuery(undefined);
-  const {
-    data: weeklySale,
-    isLoading: isLoading4,
-    isFetching: isFetching4,
-  } = useWeeklySaleQuery(undefined);
+  const { data: yearlyData, isFetching: isYearlyDataFetching } = useYearlySaleQuery(undefined);
+  const { data: monthlyData, isFetching: isMonthlyDataFetching } = useMonthlySaleQuery(undefined);
+  const { data: dailySale, isFetching: isDailySaleFetching } = useDailySaleQuery(undefined);
+  const { data: weeklySale, isFetching: isWeeklySaleFetching } = useWeeklySaleQuery(undefined);
 
-  if (isLoading1 && isLoading2 && isLoading3 && isLoading4) return <Loader />;
-  else
-    return (
-      <Row
-        style={{
-          maxHeight: 'calc(100vh - 5rem)',
-          overflow: 'auto',
-          paddingRight: '.5rem',
-        }}
-      >
-        {isLoading1 ? (
-          <Loader />
-        ) : (
-          <Col xs={{ span: 24 }} lg={{ span: 12 }} style={{ padding: '.2rem' }}>
-            <div className='sales'>
-              <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Yearly Sale</h1>
-              {yearlyData?.data && <SaleHistoryTable data={yearlyData?.data} />}
-            </div>
-          </Col>
-        )}
-        {isFetching2 ? (
-          <Loader />
-        ) : (
-          <Col xs={{ span: 24 }} lg={{ span: 12 }} style={{ padding: '.2rem' }}>
-            <div className='sales'>
-              <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Monthly Sale</h1>
-              {monthlyData?.data && <SaleHistoryTable data={monthlyData?.data} />}
-            </div>
-          </Col>
-        )}
-        {isFetching3 ? (
-          <Loader />
-        ) : (
-          <Col xs={{ span: 24 }} lg={{ span: 12 }} style={{ padding: '.2rem' }}>
-            <div className='sales'>
-              <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Weekly Sale</h1>
-              {weeklySale?.data && <SaleHistoryTable data={weeklySale?.data} />}
-            </div>
-          </Col>
-        )}
-        {isFetching4 ? (
-          <Loader />
-        ) : (
-          <Col xs={{ span: 24 }} lg={{ span: 12 }} style={{ padding: '.2rem' }}>
-            <div className='sales'>
-              <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Daily Sale</h1>
-              {dailySale?.data && <SaleHistoryTable data={dailySale?.data} />}
-            </div>
-          </Col>
-        )}
-      </Row>
-    );
+  return (
+    <Row
+      style={{
+        maxHeight: 'calc(100vh - 5rem)',
+        overflow: 'auto',
+        paddingRight: '.5rem',
+      }}
+    >
+      <Col xs={{ span: 24 }} lg={{ span: 12 }} style={{ padding: '.2rem' }}>
+        <div className='sales'>
+          <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Yearly Sale</h1>
+          <HistoryTable data={yearlyData} isFetching={isYearlyDataFetching} />
+        </div>
+      </Col>
+      <Col xs={{ span: 24 }} lg={{ span: 12 }} style={{ padding: '.2rem' }}>
+        <div className='sales'>
+          <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Monthly Sale</h1>
+          <HistoryTable data={monthlyData} isFetching={isMonthlyDataFetching} />
+        </div>
+      </Col>
+      <Col xs={{ span: 24 }} lg={{ span: 12 }} style={{ padding: '.2rem' }}>
+        <div className='sales'>
+          <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Weekly Sale</h1>
+          <HistoryTable data={weeklySale} isFetching={isWeeklySaleFetching} />
+        </div>
+      </Col>
+      <Col xs={{ span: 24 }} lg={{ span: 12 }} style={{ padding: '.2rem' }}>
+        <div className='sales'>
+          <h1 style={{ fontSize: '2rem', textAlign: 'center' }}>Daily Sale</h1>
+          <HistoryTable data={dailySale} isFetching={isDailySaleFetching} />
+        </div>
+      </Col>
+    </Row>
+  );
 };
 
 export default SaleHistoryPage;
