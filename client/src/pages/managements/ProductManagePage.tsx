@@ -7,7 +7,7 @@ import { useGetAllProductsQuery } from '../../redux/features/productApi';
 import { IProduct } from '../../types/product.types';
 import ProductManagementFilter from '../../components/query-filters/ProductManagementFilter';
 
-const NewProductManagePage = () => {
+const ProductManagePage = () => {
   const [current, setCurrent] = useState(1);
   const [query, setQuery] = useState({
     name: '',
@@ -138,6 +138,7 @@ const SellProductModal = ({ product }: { product: IProduct }) => {
       </Button>
       <Modal title='Sell Product' open={isModalOpen} onCancel={handleCancel} footer={null}>
         <form onSubmit={handleSubmit(onSubmit)}>
+          <h1>Working on it...!!!</h1>
           <Button htmlType='submit'>Submit</Button>
         </form>
       </Modal>
@@ -176,6 +177,7 @@ const AddStockModal = ({ product }: { product: IProduct }) => {
       </Button>
       <Modal title='Add Product to Stock' open={isModalOpen} onCancel={handleCancel} footer={null}>
         <form onSubmit={handleSubmit(onSubmit)}>
+          <h1>Working on it...!!!</h1>
           <Button htmlType='submit'>Submit</Button>
         </form>
       </Modal>
@@ -214,6 +216,7 @@ const UpdateProductModal = ({ product }: { product: IProduct }) => {
       </Button>
       <Modal title='Update Product Info' open={isModalOpen} onCancel={handleCancel} footer={null}>
         <form onSubmit={handleSubmit(onSubmit)}>
+          <h1>Working on it...!!!</h1>
           <Button htmlType='submit'>Submit</Button>
         </form>
       </Modal>
@@ -245,14 +248,11 @@ const DeleteProductModal = () => {
       >
         <DeleteFilled />
       </Button>
-      <Modal
-        title='Delete Product'
-        open={isModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-      ></Modal>
+      <Modal title='Delete Product' open={isModalOpen} onCancel={handleCancel} footer={null}>
+        <h1>Working on it...!!!</h1>
+      </Modal>
     </>
   );
 };
 
-export default NewProductManagePage;
+export default ProductManagePage;

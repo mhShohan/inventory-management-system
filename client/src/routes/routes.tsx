@@ -8,10 +8,10 @@ import ProfilePage from '../pages/ProfilePage';
 import SaleHistoryPage from '../pages/SaleHistoryPage';
 import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
-import AllSalesPage from '../pages/managements/AllSalesPage';
-import ManagePurchase from '../pages/managements/ManagePurchase';
-import ManageSeller from '../pages/managements/ManageSeller';
 import ProductManagePage from '../pages/managements/ProductManagePage';
+import PurchaseManagementPage from '../pages/managements/PurchaseManagementPage';
+import SaleManagementPage from '../pages/managements/SaleManagementPage';
+import SellerManagementPage from '../pages/managements/SellerManagementPage';
 
 export const router = createBrowserRouter([
   {
@@ -54,7 +54,7 @@ export const router = createBrowserRouter([
         path: 'sales',
         element: (
           <ProtectRoute>
-            <AllSalesPage />
+            <SaleManagementPage />
           </ProtectRoute>
         ),
       },
@@ -62,7 +62,7 @@ export const router = createBrowserRouter([
         path: 'sellers',
         element: (
           <ProtectRoute>
-            <ManageSeller />
+            <SellerManagementPage />
           </ProtectRoute>
         ),
       },
@@ -70,7 +70,7 @@ export const router = createBrowserRouter([
         path: 'purchases',
         element: (
           <ProtectRoute>
-            <ManagePurchase />
+            <PurchaseManagementPage />
           </ProtectRoute>
         ),
       },
