@@ -21,13 +21,22 @@ class PurchaseController {
 
   // read
   getAll = asyncHandler(async (req, res) => {
-    const result = await this.services.getAll(req.user._id)
+    const result = await this.services.getAll(req.user._id, req.query)
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
 
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: 'Purchase retrieved successfully!',
-      data: result
+      meta: {
+        page,
+        limit,
+        total: result?.totalCount || 0,
+        totalPage: Math.ceil(result?.totalCount / page)
+      },
+      data: result.data
     });
   });
 

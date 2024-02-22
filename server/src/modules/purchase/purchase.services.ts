@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 import BaseServices from "../baseServices";
 import { IPurchase } from "./purchase.interface";
 import Purchase from "./purchase.model";
+import sortAndPaginatePipeline from "../../lib/sortAndPaginate.pipeline";
 
 class PurchaseServices extends BaseServices<any>{
   constructor(model: any, modelName: string) {
@@ -23,8 +24,15 @@ class PurchaseServices extends BaseServices<any>{
   /**
    * Read all category of user
    */
-  async getAll(userId: string) {
-    return this.model.find({ user: userId })
+  async getAll(userId: string, query: Record<string, unknown>) {
+    const data = await this.model.aggregate([
+      { $match: { user: new Types.ObjectId(userId) } },
+      ...sortAndPaginatePipeline(query)
+    ])
+
+    const totalCount = await this.model.find({ user: userId }).countDocuments()
+
+    return { data, totalCount }
   }
 }
 
