@@ -3,7 +3,7 @@ import type { PaginationProps, TableColumnsType } from 'antd';
 import { Button, Flex, Modal, Pagination, Table } from 'antd';
 import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
-import { useGetAllSellerQuery } from '../../redux/features/sellerApi';
+import { useGetAllSellerQuery } from '../../redux/features/management/sellerApi';
 import { IProduct, ISeller } from '../../types/product.types';
 
 const SellerManagementPage = () => {

@@ -5,7 +5,7 @@ import toastMessage from '../lib/toastMessage';
 import { useGetAllBrandsQuery } from '../redux/features/management/brandApi';
 import { useGetAllCategoriesQuery } from '../redux/features/management/categoryApi';
 import { useCreateNewProductMutation } from '../redux/features/management/productApi';
-import { useGetAllSellerQuery } from '../redux/features/sellerApi';
+import { useGetAllSellerQuery } from '../redux/features/management/sellerApi';
 import { ICategory } from '../types/product.types';
 import CreateSeller from '../components/product/CreateSeller';
 import CreateCategory from '../components/product/CreateCategory';

@@ -1,7 +1,7 @@
 import { Button, Flex, Modal } from 'antd';
 import { FieldValues, useForm } from 'react-hook-form';
 import CustomInput from '../CustomInput';
-import { useCreateSellerMutation } from '../../redux/features/sellerApi';
+import { useCreateSellerMutation } from '../../redux/features/management/sellerApi';
 import toastMessage from '../../lib/toastMessage';
 
 interface CreateSellerModalProps {
