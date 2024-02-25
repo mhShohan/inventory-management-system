@@ -1,7 +1,7 @@
 import { Button, Col, Flex, Modal, Row } from 'antd';
 import { ChangeEvent, useEffect, useState } from 'react';
 import toastMessage from '../../lib/toastMessage';
-import { useUpdateProductMutation } from '../../redux/features/productApi';
+import { useUpdateProductMutation } from '../../redux/features/management/productApi';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
   getUpdateModal,

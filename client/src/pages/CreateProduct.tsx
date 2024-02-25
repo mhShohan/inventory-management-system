@@ -4,7 +4,7 @@ import CustomInput from '../components/CustomInput';
 import toastMessage from '../lib/toastMessage';
 import { useGetAllBrandsQuery } from '../redux/features/brandApi';
 import { useGetAllCategoriesQuery } from '../redux/features/categoryApi';
-import { useCreateNewProductMutation } from '../redux/features/productApi';
+import { useCreateNewProductMutation } from '../redux/features/management/productApi';
 import { useGetAllSellerQuery } from '../redux/features/sellerApi';
 import { ICategory } from '../types/product.types';
 import CreateSeller from '../components/product/CreateSeller';

@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import Loader from '../components/Loader';
-import { useCountProductsQuery } from '../redux/features/productApi';
+import { useCountProductsQuery } from '../redux/features/management/productApi';
 import { useYearlySaleQuery } from '../redux/features/saleApi';
 
 const Dashboard = () => {

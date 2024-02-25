@@ -9,7 +9,7 @@ import {
 } from '../../redux/services/modal.Slice';
 import { IProduct } from '../../types/product.types';
 import ModalInput from './ModalInput';
-import { useCreateNewProductMutation } from '../../redux/features/productApi';
+import { useCreateNewProductMutation } from '../../redux/features/management/productApi';
 
 const AddStockModal = () => {
   const modalOpen = useAppSelector(getCreateVariantModel);
