@@ -1,7 +1,7 @@
 import { Col, Flex, Row, Slider } from 'antd';
 import React from 'react';
 import { useGetAllCategoriesQuery } from '../../redux/features/categoryApi';
-import { useGetAllBrandsQuery } from '../../redux/features/brandApi';
+import { useGetAllBrandsQuery } from '../../redux/features/management/brandApi';
 
 interface ProductManagementFilterProps {
   query: { name: string; category: string; brand: string; limit: number };

@@ -26,6 +26,9 @@ jobs:
       - name: change to client directory
         run: cd ./client
 
+      - name: Install Dependency
+        run: npm install
+
       - name: Build Project Artifacts
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 

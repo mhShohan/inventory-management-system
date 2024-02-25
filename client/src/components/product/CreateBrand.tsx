@@ -1,6 +1,6 @@
 import { Button, Flex } from 'antd';
 import { useState } from 'react';
-import { useCreateBrandMutation } from '../../redux/features/brandApi';
+import { useCreateBrandMutation } from '../../redux/features/management/brandApi';
 import toastMessage from '../../lib/toastMessage';
 
 const CreateBrand = () => {
