@@ -17,7 +17,7 @@ const NotFound = () => {
         style={{ border: '1px solid #000', padding: '3rem', borderRadius: '.8rem' }}
       >
         <h1>404! Not Found...</h1>
-        <h3>Your requested page does not exists...</h3>
+        <h3>Your requested page does not exists...!!!</h3>
         <Button type='primary' onClick={handleClick}>
           Go Back
         </Button>
