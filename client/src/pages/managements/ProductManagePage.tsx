@@ -114,6 +114,8 @@ const SellProductModal = ({ product }: { product: IProduct }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { handleSubmit } = useForm();
 
+  console.log(product);
+
   const onSubmit = (data: FieldValues) => {
     console.log(data);
   };
@@ -153,6 +155,8 @@ const AddStockModal = ({ product }: { product: IProduct }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { handleSubmit } = useForm();
 
+  console.log(product);
+
   const onSubmit = (data: FieldValues) => {
     console.log(data);
   };
@@ -191,6 +195,8 @@ const AddStockModal = ({ product }: { product: IProduct }) => {
 const UpdateProductModal = ({ product }: { product: IProduct }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { handleSubmit } = useForm();
+
+  console.log(product);
 
   const onSubmit = (data: FieldValues) => {
     console.log(data);
