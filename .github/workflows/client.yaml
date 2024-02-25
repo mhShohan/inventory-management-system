@@ -24,7 +24,7 @@ jobs:
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: change to client directory
-        run: cd ./client
+        run: cd client
 
       - name: Install Dependency
         run: npm install

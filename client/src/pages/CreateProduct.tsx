@@ -3,7 +3,7 @@ import { FieldValues, useForm } from 'react-hook-form';
 import CustomInput from '../components/CustomInput';
 import toastMessage from '../lib/toastMessage';
 import { useGetAllBrandsQuery } from '../redux/features/management/brandApi';
-import { useGetAllCategoriesQuery } from '../redux/features/categoryApi';
+import { useGetAllCategoriesQuery } from '../redux/features/management/categoryApi';
 import { useCreateNewProductMutation } from '../redux/features/management/productApi';
 import { useGetAllSellerQuery } from '../redux/features/sellerApi';
 import { ICategory } from '../types/product.types';
