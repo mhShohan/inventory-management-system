@@ -20,6 +20,9 @@ jobs:
         with:
           node-version: 14
 
+      - name: Change Directory to Client
+        run: cd ./client
+
       - name: Install dependencies
         run: npm install
 
