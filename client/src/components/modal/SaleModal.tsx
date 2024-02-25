@@ -4,7 +4,7 @@ import toastMessage from '../../lib/toastMessage';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getSaleModal, getSaleModalData, toggleSaleModel } from '../../redux/services/modal.Slice';
 import ModalInput from './ModalInput';
-import { useCreateSaleMutation } from '../../redux/features/saleApi';
+import { useCreateSaleMutation } from '../../redux/features/management/saleApi';
 
 const SaleModal = () => {
   const modalOpen = useAppSelector(getSaleModal);

@@ -5,7 +5,7 @@ import {
   useMonthlySaleQuery,
   useWeeklySaleQuery,
   useYearlySaleQuery,
-} from '../redux/features/saleApi';
+} from '../redux/features/management/saleApi';
 
 const SaleHistoryPage = () => {
   const { data: yearlyData, isFetching: isYearlyDataFetching } = useYearlySaleQuery(undefined);
