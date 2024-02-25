@@ -3,7 +3,7 @@ import type { PaginationProps, TableColumnsType } from 'antd';
 import { Button, Flex, Modal, Pagination, Table } from 'antd';
 import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
-import { useGetAllPurchasesQuery } from '../../redux/features/purchaseApi';
+import { useGetAllPurchasesQuery } from '../../redux/features/management/purchaseApi';
 import { IProduct } from '../../types/product.types';
 import { IPurchase } from '../../types/purchase.types';
 import formatDate from '../../utils/formatDate';
