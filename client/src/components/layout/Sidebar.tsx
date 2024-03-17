@@ -84,6 +84,7 @@ const Sidebar = () => {
             style={{
               padding: '1rem',
               maxHeight: 'calc(100vh - 4rem)',
+              minHeight: 'calc(100vh - 4rem)',
               background: '#fff',
               borderRadius: '1rem',
               overflow: 'auto',

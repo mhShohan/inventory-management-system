@@ -1,16 +1,21 @@
 import {DeleteFilled, EditFilled} from '@ant-design/icons';
 import type {PaginationProps, TableColumnsType} from 'antd';
-import {Button, Flex, Modal, Pagination, Table, Tag} from 'antd';
+import {Button, Col, Flex, Modal, Pagination, Row, Table, Tag} from 'antd';
 import {useState} from 'react';
 import {FieldValues, useForm} from 'react-hook-form';
 import {
   useAddStockMutation,
+  useDeleteProductMutation,
   useGetAllProductsQuery,
+  useUpdateProductMutation,
 } from '../../redux/features/management/productApi';
-import {IProduct} from '../../types/product.types';
+import {ICategory, IProduct} from '../../types/product.types';
 import ProductManagementFilter from '../../components/query-filters/ProductManagementFilter';
 import CustomInput from '../../components/CustomInput';
 import toastMessage from '../../lib/toastMessage';
+import {useGetAllCategoriesQuery} from '../../redux/features/management/categoryApi';
+import {useGetAllSellerQuery} from '../../redux/features/management/sellerApi';
+import {useGetAllBrandsQuery} from '../../redux/features/management/brandApi';
 
 const ProductManagePage = () => {
   const [current, setCurrent] = useState(1);
@@ -82,7 +87,7 @@ const ProductManagePage = () => {
             <SellProductModal product={item} />
             <AddStockModal product={item} />
             <UpdateProductModal product={item} />
-            <DeleteProductModal />
+            <DeleteProductModal id={item.key} />
           </div>
         );
       },
@@ -215,14 +220,42 @@ const AddStockModal = ({product}: {product: IProduct & {key: string}}) => {
 /**
  * Update Product Modal
  */
-const UpdateProductModal = ({product}: {product: IProduct}) => {
+const UpdateProductModal = ({product}: {product: IProduct & {key: string}}) => {
+  const [updateProduct] = useUpdateProductMutation();
+  const {data: categories} = useGetAllCategoriesQuery(undefined);
+  const {data: sellers, isLoading: isSellerLoading} = useGetAllSellerQuery(undefined);
+  const {data: brands} = useGetAllBrandsQuery(undefined);
+
+  const {
+    handleSubmit,
+    register,
+    formState: {errors},
+    reset,
+  } = useForm({
+    defaultValues: {
+      name: product.name,
+      price: product.price,
+      seller: product.seller._id,
+      category: product.category._id,
+      brand: product.brand?._id,
+      description: product.description,
+      size: product.size,
+    },
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const {handleSubmit} = useForm();
 
-  console.log(product);
-
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
+  const onSubmit = async (data: FieldValues) => {
+    try {
+      const res = await updateProduct({id: product.key, payload: data}).unwrap();
+      if (res.statusCode === 200) {
+        toastMessage({icon: 'success', text: res.message});
+        reset();
+        handleCancel();
+      }
+    } catch (error: any) {
+      handleCancel();
+      toastMessage({icon: 'error', text: error.data.message});
+    }
   };
 
   const showModal = () => {
@@ -245,8 +278,111 @@ const UpdateProductModal = ({product}: {product: IProduct}) => {
       </Button>
       <Modal title='Update Product Info' open={isModalOpen} onCancel={handleCancel} footer={null}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h1>Working on it...!!!</h1>
-          <Button htmlType='submit'>Submit</Button>
+          <CustomInput
+            name='name'
+            errors={errors}
+            label='Name'
+            register={register}
+            required={true}
+          />
+          <CustomInput
+            errors={errors}
+            label='Price'
+            type='number'
+            name='price'
+            register={register}
+            required={true}
+          />
+          <Row>
+            <Col xs={{span: 23}} lg={{span: 6}}>
+              <label htmlFor='Size' className='label'>
+                Seller
+              </label>
+            </Col>
+            <Col xs={{span: 23}} lg={{span: 18}}>
+              <select
+                disabled={isSellerLoading}
+                {...register('seller', {required: true})}
+                className={`input-field ${errors['seller'] ? 'input-field-error' : ''}`}
+              >
+                <option value=''>Select Seller*</option>
+                {sellers?.data.map((item: ICategory) => (
+                  <option value={item._id} key={item._id}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col xs={{span: 23}} lg={{span: 6}}>
+              <label htmlFor='Size' className='label'>
+                Category
+              </label>
+            </Col>
+            <Col xs={{span: 23}} lg={{span: 18}}>
+              <select
+                {...register('category', {required: true})}
+                className={`input-field ${errors['category'] ? 'input-field-error' : ''}`}
+              >
+                <option value=''>Select Category*</option>
+                {categories?.data.map((item: ICategory) => (
+                  <option value={item._id} key={item._id}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col xs={{span: 23}} lg={{span: 6}}>
+              <label htmlFor='Size' className='label'>
+                Brand
+              </label>
+            </Col>
+            <Col xs={{span: 23}} lg={{span: 18}}>
+              <select
+                {...register('brand')}
+                className={`input-field ${errors['brand'] ? 'input-field-error' : ''}`}
+              >
+                <option value=''>Select brand</option>
+                {brands?.data.map((item: ICategory) => (
+                  <option value={item._id} key={item._id}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </Col>
+          </Row>
+
+          <CustomInput label='Description' name='description' register={register} />
+
+          <Row>
+            <Col xs={{span: 23}} lg={{span: 6}}>
+              <label htmlFor='Size' className='label'>
+                Size
+              </label>
+            </Col>
+            <Col xs={{span: 23}} lg={{span: 18}}>
+              <select className={`input-field`} {...register('size')}>
+                <option value=''>Select Product Size</option>
+                <option value='SMALL'>Small</option>
+                <option value='MEDIUM'>Medium</option>
+                <option value='LARGE'>Large</option>
+              </select>
+            </Col>
+          </Row>
+          <Flex justify='center'>
+            <Button
+              htmlType='submit'
+              type='primary'
+              style={{textTransform: 'uppercase', fontWeight: 'bold'}}
+            >
+              Update
+            </Button>
+          </Flex>
         </form>
       </Modal>
     </>
@@ -256,8 +392,9 @@ const UpdateProductModal = ({product}: {product: IProduct}) => {
 /**
  * Delete Product Modal
  */
-const DeleteProductModal = () => {
+const DeleteProductModal = ({id}: {id: string}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteProduct] = useDeleteProductMutation();
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -265,6 +402,19 @@ const DeleteProductModal = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await deleteProduct(id).unwrap();
+      if (res.statusCode === 200) {
+        toastMessage({icon: 'success', text: res.message});
+        handleCancel();
+      }
+    } catch (error: any) {
+      handleCancel();
+      toastMessage({icon: 'error', text: error.data.message});
+    }
   };
 
   return (
@@ -278,7 +428,26 @@ const DeleteProductModal = () => {
         <DeleteFilled />
       </Button>
       <Modal title='Delete Product' open={isModalOpen} onCancel={handleCancel} footer={null}>
-        <h1>Working on it...!!!</h1>
+        <div style={{textAlign: 'center', padding: '2rem'}}>
+          <h2>Are you want to delete this product?</h2>
+          <h4>You won't be able to revert it.</h4>
+          <div style={{display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem'}}>
+            <Button
+              onClick={handleCancel}
+              type='primary'
+              style={{backgroundColor: 'lightseagreen'}}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => handleDelete(id)}
+              type='primary'
+              style={{backgroundColor: 'red'}}
+            >
+              Yes! Delete
+            </Button>
+          </div>
+        </div>
       </Modal>
     </>
   );
