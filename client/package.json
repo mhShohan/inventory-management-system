@@ -1,7 +1,7 @@
 {
   "name": "fullstack-assignment-1-client",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.7.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

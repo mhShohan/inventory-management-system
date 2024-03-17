@@ -12,6 +12,7 @@ productRoute.get('/total', productControllers.getTotalProduct);
 productRoute.post('/bulk-delete', productControllers.bulkDelete);
 productRoute.post('/', validateRequest(productValidator.createSchema), productControllers.create);
 productRoute.get('/', productControllers.readAll);
+productRoute.patch('/:id/add', validateRequest(productValidator.addStockSchema), productControllers.addStock);
 productRoute.patch('/:id', validateRequest(productValidator.updateSchema), productControllers.update);
 productRoute.get('/:id', productControllers.readSingle);
 productRoute.delete('/:id', productControllers.delete);

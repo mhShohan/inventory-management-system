@@ -33,6 +33,14 @@ const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['product']
     }),
+    addStock: builder.mutation({
+      query: ({ id, payload }) => ({
+        url: `/products/${id}/add`,
+        method: 'PATCH',
+        body: payload,
+      }),
+      invalidatesTags: ['product']
+    }),
     deleteProduct: builder.mutation({
       query: (id) => ({
         url: `/products/${id}`,
@@ -63,6 +71,8 @@ export const {
   useGetAllProductsQuery,
   useCountProductsQuery,
   useCreateNewProductMutation,
+  useAddStockMutation,
   useDeleteProductMutation,
   useGetSingleProductQuery,
-  useUpdateProductMutation, useBulkDeleteMutation } = productApi
+  useUpdateProductMutation,
+  useBulkDeleteMutation } = productApi

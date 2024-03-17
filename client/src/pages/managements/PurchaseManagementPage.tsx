@@ -1,11 +1,11 @@
-import { DeleteFilled, EditFilled } from '@ant-design/icons';
-import type { PaginationProps, TableColumnsType } from 'antd';
-import { Button, Flex, Modal, Pagination, Table } from 'antd';
-import { useState } from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
-import { useGetAllPurchasesQuery } from '../../redux/features/management/purchaseApi';
-import { IProduct } from '../../types/product.types';
-import { IPurchase } from '../../types/purchase.types';
+import {DeleteFilled, EditFilled} from '@ant-design/icons';
+import type {PaginationProps, TableColumnsType} from 'antd';
+import {Button, Flex, Modal, Pagination, Table} from 'antd';
+import {useState} from 'react';
+import {FieldValues, useForm} from 'react-hook-form';
+import {useGetAllPurchasesQuery} from '../../redux/features/management/purchaseApi';
+import {IProduct} from '../../types/product.types';
+import {IPurchase} from '../../types/purchase.types';
 import formatDate from '../../utils/formatDate';
 
 const PurchaseManagementPage = () => {
@@ -14,10 +14,10 @@ const PurchaseManagementPage = () => {
     limit: 10,
   });
 
-  const { data, isFetching } = useGetAllPurchasesQuery(query);
+  const {data, isFetching} = useGetAllPurchasesQuery(query);
 
   const onChange: PaginationProps['onChange'] = (page) => {
-    setQuery((prev) => ({ ...prev, page: page }));
+    setQuery((prev) => ({...prev, page: page}));
   };
 
   const tableData = data?.data?.map((purchase: IPurchase) => ({
@@ -78,7 +78,7 @@ const PurchaseManagementPage = () => {
       align: 'center',
       render: (item) => {
         return (
-          <div style={{ display: 'flex' }}>
+          <div style={{display: 'flex'}}>
             <UpdateModal product={item} />
             <DeleteModal />
           </div>
@@ -97,7 +97,7 @@ const PurchaseManagementPage = () => {
         dataSource={tableData}
         pagination={false}
       />
-      <Flex justify='center' style={{ marginTop: '1rem' }}>
+      <Flex justify='center' style={{marginTop: '1rem'}}>
         <Pagination
           current={query.page}
           onChange={onChange}
@@ -112,9 +112,9 @@ const PurchaseManagementPage = () => {
 /**
  * Update Modal
  */
-const UpdateModal = ({ product }: { product: IProduct }) => {
+const UpdateModal = ({product}: {product: IProduct}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { handleSubmit } = useForm();
+  const {handleSubmit} = useForm();
 
   console.log(product);
 
@@ -136,7 +136,7 @@ const UpdateModal = ({ product }: { product: IProduct }) => {
         onClick={showModal}
         type='primary'
         className='table-btn-small'
-        style={{ backgroundColor: 'green' }}
+        style={{backgroundColor: 'green'}}
       >
         <EditFilled />
       </Button>
@@ -170,7 +170,7 @@ const DeleteModal = () => {
         onClick={showModal}
         type='primary'
         className='table-btn-small'
-        style={{ backgroundColor: 'red' }}
+        style={{backgroundColor: 'red'}}
       >
         <DeleteFilled />
       </Button>

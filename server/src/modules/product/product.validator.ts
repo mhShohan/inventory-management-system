@@ -20,5 +20,9 @@ const updateSchema = z.object({
   stock: z.number().min(1, { message: 'Must be grater than 1!' }).optional()
 });
 
-const productValidator = { createSchema, updateSchema };
+const addStockSchema = z.object({
+  stock: z.number().min(1, { message: 'Must be grater than 1!' })
+});
+
+const productValidator = { createSchema, updateSchema, addStockSchema };
 export default productValidator;

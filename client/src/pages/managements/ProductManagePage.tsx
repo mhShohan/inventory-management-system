@@ -1,11 +1,16 @@
-import { DeleteFilled, EditFilled } from '@ant-design/icons';
-import type { PaginationProps, TableColumnsType } from 'antd';
-import { Button, Flex, Modal, Pagination, Table, Tag } from 'antd';
-import { useState } from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
-import { useGetAllProductsQuery } from '../../redux/features/management/productApi';
-import { IProduct } from '../../types/product.types';
+import {DeleteFilled, EditFilled} from '@ant-design/icons';
+import type {PaginationProps, TableColumnsType} from 'antd';
+import {Button, Flex, Modal, Pagination, Table, Tag} from 'antd';
+import {useState} from 'react';
+import {FieldValues, useForm} from 'react-hook-form';
+import {
+  useAddStockMutation,
+  useGetAllProductsQuery,
+} from '../../redux/features/management/productApi';
+import {IProduct} from '../../types/product.types';
 import ProductManagementFilter from '../../components/query-filters/ProductManagementFilter';
+import CustomInput from '../../components/CustomInput';
+import toastMessage from '../../lib/toastMessage';
 
 const ProductManagePage = () => {
   const [current, setCurrent] = useState(1);
@@ -16,7 +21,7 @@ const ProductManagePage = () => {
     limit: 10,
   });
 
-  const { data: products, isFetching } = useGetAllProductsQuery(query);
+  const {data: products, isFetching} = useGetAllProductsQuery(query);
 
   const onChange: PaginationProps['onChange'] = (page) => {
     setCurrent(page);
@@ -73,7 +78,7 @@ const ProductManagePage = () => {
       align: 'center',
       render: (item) => {
         return (
-          <div style={{ display: 'flex' }}>
+          <div style={{display: 'flex'}}>
             <SellProductModal product={item} />
             <AddStockModal product={item} />
             <UpdateProductModal product={item} />
@@ -95,7 +100,7 @@ const ProductManagePage = () => {
         dataSource={tableData}
         pagination={false}
       />
-      <Flex justify='center' style={{ marginTop: '1rem' }}>
+      <Flex justify='center' style={{marginTop: '1rem'}}>
         <Pagination
           current={current}
           onChange={onChange}
@@ -110,9 +115,9 @@ const ProductManagePage = () => {
 /**
  * Sell Product Modal
  */
-const SellProductModal = ({ product }: { product: IProduct }) => {
+const SellProductModal = ({product}: {product: IProduct}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { handleSubmit } = useForm();
+  const {handleSubmit} = useForm();
 
   console.log(product);
 
@@ -134,7 +139,7 @@ const SellProductModal = ({ product }: { product: IProduct }) => {
         onClick={showModal}
         type='primary'
         className='table-btn'
-        style={{ backgroundColor: 'royalblue' }}
+        style={{backgroundColor: 'royalblue'}}
       >
         Sell
       </Button>
@@ -151,14 +156,28 @@ const SellProductModal = ({ product }: { product: IProduct }) => {
 /**
  * Add Stock Modal
  */
-const AddStockModal = ({ product }: { product: IProduct }) => {
+const AddStockModal = ({product}: {product: IProduct & {key: string}}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { handleSubmit } = useForm();
+  const {handleSubmit, register, reset} = useForm();
+  const [addToStock] = useAddStockMutation();
 
-  console.log(product);
+  const onSubmit = async (data: FieldValues) => {
+    const payload = {
+      stock: Number(data.stock),
+      seller: product.seller,
+    };
 
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
+    try {
+      const res = await addToStock({id: product.key, payload}).unwrap();
+      if (res.statusCode === 200) {
+        toastMessage({icon: 'success', text: res.message});
+        reset();
+        handleCancel();
+      }
+    } catch (error: any) {
+      handleCancel();
+      toastMessage({icon: 'error', text: error.data.message});
+    }
   };
 
   const showModal = () => {
@@ -175,14 +194,18 @@ const AddStockModal = ({ product }: { product: IProduct }) => {
         onClick={showModal}
         type='primary'
         className='table-btn'
-        style={{ backgroundColor: 'blue' }}
+        style={{backgroundColor: 'blue'}}
       >
         Add Stock
       </Button>
       <Modal title='Add Product to Stock' open={isModalOpen} onCancel={handleCancel} footer={null}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <h1>Working on it...!!!</h1>
-          <Button htmlType='submit'>Submit</Button>
+        <form onSubmit={handleSubmit(onSubmit)} style={{margin: '2rem'}}>
+          <CustomInput name='stock' label='Add Stock' register={register} type='number' />
+          <Flex justify='center' style={{marginTop: '1rem'}}>
+            <Button htmlType='submit' type='primary'>
+              Submit
+            </Button>
+          </Flex>
         </form>
       </Modal>
     </>
@@ -192,9 +215,9 @@ const AddStockModal = ({ product }: { product: IProduct }) => {
 /**
  * Update Product Modal
  */
-const UpdateProductModal = ({ product }: { product: IProduct }) => {
+const UpdateProductModal = ({product}: {product: IProduct}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { handleSubmit } = useForm();
+  const {handleSubmit} = useForm();
 
   console.log(product);
 
@@ -216,7 +239,7 @@ const UpdateProductModal = ({ product }: { product: IProduct }) => {
         onClick={showModal}
         type='primary'
         className='table-btn-small'
-        style={{ backgroundColor: 'green' }}
+        style={{backgroundColor: 'green'}}
       >
         <EditFilled />
       </Button>
@@ -250,7 +273,7 @@ const DeleteProductModal = () => {
         onClick={showModal}
         type='primary'
         className='table-btn-small'
-        style={{ backgroundColor: 'red' }}
+        style={{backgroundColor: 'red'}}
       >
         <DeleteFilled />
       </Button>

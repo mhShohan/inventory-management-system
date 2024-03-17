@@ -21,6 +21,20 @@ class ProductControllers {
   });
 
   /**
+   * Add product to stock 
+   */
+  addStock = asyncHandler(async (req, res) => {
+    const result = await this.services.addToStock(req.params.id, req.body, req.user._id);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'Product stock added successfully!',
+      data: result
+    });
+  });
+
+  /**
    * Get all product of user with query
    */
   readAll = asyncHandler(async (req, res) => {

@@ -34,7 +34,7 @@ class PurchaseController {
         page,
         limit,
         total: result?.totalCount || 0,
-        totalPage: Math.ceil(result?.totalCount / page)
+        totalPage: Math.ceil(result?.totalCount / limit)
       },
       data: result.data
     });

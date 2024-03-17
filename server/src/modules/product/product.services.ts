@@ -18,6 +18,13 @@ class ProductServices extends BaseServices<any> {
   * Create new product
   */
   async create(payload: IProduct, userId: string) {
+    type str = keyof IProduct;
+    (Object.keys(payload) as str[]).forEach((key: str) => {
+      if (payload[key] === '') {
+        delete payload[key]
+      }
+    })
+
     payload.user = new Types.ObjectId(userId);
     const session = await mongoose.startSession();
 
@@ -122,6 +129,43 @@ class ProductServices extends BaseServices<any> {
 
     return this.model.deleteMany({ _id: { $in: data } });
   }
+
+  /**
+  * Create new product
+  */
+  async addToStock(id: string, payload: Pick<IProduct, 'seller' | 'stock'>, userId: string) {
+
+    const session = await mongoose.startSession();
+
+    try {
+      session.startTransaction();
+
+      const seller = await Seller.findById(payload.seller)
+      const product: any = await this.model.findByIdAndUpdate(id, { $inc: { stock: payload.stock } }, { session });
+
+      await Purchase.create([{
+        user: userId,
+        seller: product.seller,
+        product: product._id,
+        sellerName: seller?.name,
+        productName: product.name,
+        quantity: Number(product.stock),
+        unitPrice: Number(product.price),
+        totalPrice: Number(product.stock) * Number(product.price),
+      }], { session })
+
+      await session.commitTransaction();
+
+      return product;
+    } catch (error) {
+      console.log(error)
+      await session.abortTransaction();
+      throw new CustomError(400, 'Product create failed');
+    } finally {
+      await session.endSession();
+    }
+  }
+
 }
 
 const productServices = new ProductServices(Product, 'Product');
