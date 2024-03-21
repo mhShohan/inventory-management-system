@@ -1,6 +1,6 @@
-import { Types } from "mongoose";
+import { Types } from 'mongoose';
 
 export interface ICategory {
-  user: Types.ObjectId
-  name: string
+  user: Types.ObjectId;
+  name: string;
 }

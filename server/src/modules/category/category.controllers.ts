@@ -1,15 +1,14 @@
-import httpStatus from "http-status"
-import asyncHandler from "../../lib/asyncHandler"
-import sendResponse from "../../lib/sendResponse"
-import categoryServices from "./category.services";
-
+import httpStatus from 'http-status';
+import asyncHandler from '../../lib/asyncHandler';
+import sendResponse from '../../lib/sendResponse';
+import categoryServices from './category.services';
 
 class CategoryController {
-  private services = categoryServices
+  private services = categoryServices;
 
   // create
   create = asyncHandler(async (req, res) => {
-    const result = await this.services.create(req.body, req.user._id)
+    const result = await this.services.create(req.body, req.user._id);
 
     sendResponse(res, {
       success: true,
@@ -21,7 +20,7 @@ class CategoryController {
 
   // read
   getAll = asyncHandler(async (req, res) => {
-    const result = await this.services.getAll(req.user._id)
+    const result = await this.services.getAll(req.user._id);
 
     sendResponse(res, {
       success: true,
@@ -31,9 +30,9 @@ class CategoryController {
     });
   });
 
-  // update 
+  // update
   update = asyncHandler(async (req, res) => {
-    const result = await this.services.update(req.params.id, req.body)
+    const result = await this.services.update(req.params.id, req.body);
 
     sendResponse(res, {
       success: true,
@@ -45,7 +44,7 @@ class CategoryController {
 
   // delete
   delete = asyncHandler(async (req, res) => {
-    await this.services.delete(req.params.id)
+    await this.services.delete(req.params.id);
 
     sendResponse(res, {
       success: true,
@@ -55,5 +54,5 @@ class CategoryController {
   });
 }
 
-const categoryController = new CategoryController()
-export default categoryController
+const categoryController = new CategoryController();
+export default categoryController;

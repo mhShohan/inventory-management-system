@@ -43,7 +43,6 @@ class SellerControllers {
     });
   });
 
-
   /**
    * Get single sale of user
    */

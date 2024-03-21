@@ -5,7 +5,7 @@ import httpStatus from 'http-status';
 
 class BaseServices<T> {
   protected model: Model<T>;
-  protected modelName: string = ''
+  protected modelName: string = '';
 
   constructor(model: Model<T>, modelName: string) {
     if (!model || !(model.prototype instanceof Model)) {
@@ -13,19 +13,19 @@ class BaseServices<T> {
     }
 
     this.model = model;
-    this.modelName = modelName
+    this.modelName = modelName;
   }
 
   /**
-  * Create new 
-  */
+   * Create new
+   */
   async create(payload: any, userId: string) {
     payload.user = userId;
     return this.model.create(payload);
   }
 
   /**
-   * Update 
+   * Update
    */
   async update(id: string, payload: any) {
     await this._isExists(id);

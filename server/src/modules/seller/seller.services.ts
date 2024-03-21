@@ -15,11 +15,11 @@ class SellerServices extends BaseServices<any> {
    */
   async create(payload: any, userId: string) {
     payload.user = userId;
-    return this.model.create(payload,);
+    return this.model.create(payload);
   }
 
   /**
-   *  Get all sale 
+   *  Get all sale
    */
   async readAll(query: Record<string, unknown> = {}, userId: string) {
     const data = await this.model.aggregate([
@@ -30,7 +30,6 @@ class SellerServices extends BaseServices<any> {
       },
       ...sortAndPaginatePipeline(query)
     ]);
-
 
     const totalCount = await this.model.aggregate([
       {

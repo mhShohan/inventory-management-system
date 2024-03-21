@@ -44,7 +44,7 @@ class SaleServices extends BaseServices<any> {
   }
 
   /**
-   *  Get all sale 
+   *  Get all sale
    */
   async readAll(query: Record<string, unknown> = {}, userId: string) {
     const data = await this.model.aggregate([
@@ -55,7 +55,6 @@ class SaleServices extends BaseServices<any> {
       },
       ...sortAndPaginatePipeline(query)
     ]);
-
 
     const totalCount = await this.model.aggregate([
       {
