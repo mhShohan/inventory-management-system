@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const createSchema = z.object({
   seller: z.string(),
@@ -8,7 +8,7 @@ const createSchema = z.object({
   quantity: z.number(),
   unitPrice: z.number(),
   paid: z.number().optional()
-})
+});
 
 const updateSchema = z.object({
   seller: z.string().optional(),
@@ -18,7 +18,7 @@ const updateSchema = z.object({
   quantity: z.number().optional(),
   unitPrice: z.number().optional(),
   paid: z.number().optional()
-})
+});
 
-const purchaseValidator = { createSchema, updateSchema }
-export default purchaseValidator
+const purchaseValidator = { createSchema, updateSchema };
+export default purchaseValidator;

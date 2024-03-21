@@ -11,7 +11,7 @@ const productSchema = new Schema<IProduct>(
     brand: { type: Schema.Types.ObjectId, ref: 'brand' },
     price: { type: Number, required: true },
     stock: { type: Number, required: true },
-    description: { type: String },
+    description: { type: String }
   },
   { timestamps: true }
 );

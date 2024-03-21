@@ -10,7 +10,7 @@ const updatedProfileSchema = z.object({
   name: z.string().optional(),
   title: z.string().optional(),
   description: z.string().optional(),
-  avatar: z.string().optional(),
+  avatar: z.string().optional()
 });
 
 const loginSchema = z.object({

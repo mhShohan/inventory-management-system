@@ -21,7 +21,7 @@ class ProductControllers {
   });
 
   /**
-   * Add product to stock 
+   * Add product to stock
    */
   addStock = asyncHandler(async (req, res) => {
     const result = await this.services.addToStock(req.params.id, req.body, req.user._id);

@@ -6,7 +6,7 @@ import userServices from './user.services';
 class UserControllers {
   private services = userServices;
 
-  // get self profile 
+  // get self profile
   getSelf = asyncHandler(async (req, res) => {
     const result = await this.services.getSelf(req.user._id);
 
