@@ -16,9 +16,9 @@ class SaleServices extends BaseServices<any> {
    * Create new sale and decrease product stock
    */
   async create(payload: any, userId: string) {
-    const { price, quantity } = payload;
+    const { productPrice, quantity } = payload;
     payload.user = userId;
-    payload.totalPrice = price * quantity;
+    payload.totalPrice = productPrice * quantity;
     const product = await Product.findById(payload.product);
 
     if (quantity > product!.stock) {

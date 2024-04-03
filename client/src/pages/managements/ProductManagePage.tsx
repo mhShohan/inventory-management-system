@@ -1,21 +1,22 @@
-import {DeleteFilled, EditFilled} from '@ant-design/icons';
-import type {PaginationProps, TableColumnsType} from 'antd';
-import {Button, Col, Flex, Modal, Pagination, Row, Table, Tag} from 'antd';
-import {useState} from 'react';
-import {FieldValues, useForm} from 'react-hook-form';
+import { DeleteFilled, EditFilled } from '@ant-design/icons';
+import type { PaginationProps, TableColumnsType } from 'antd';
+import { Button, Col, Flex, Modal, Pagination, Row, Table, Tag } from 'antd';
+import { useState } from 'react';
+import { FieldValues, useForm } from 'react-hook-form';
 import {
   useAddStockMutation,
   useDeleteProductMutation,
   useGetAllProductsQuery,
   useUpdateProductMutation,
 } from '../../redux/features/management/productApi';
-import {ICategory, IProduct} from '../../types/product.types';
+import { ICategory, IProduct } from '../../types/product.types';
 import ProductManagementFilter from '../../components/query-filters/ProductManagementFilter';
 import CustomInput from '../../components/CustomInput';
 import toastMessage from '../../lib/toastMessage';
-import {useGetAllCategoriesQuery} from '../../redux/features/management/categoryApi';
-import {useGetAllSellerQuery} from '../../redux/features/management/sellerApi';
-import {useGetAllBrandsQuery} from '../../redux/features/management/brandApi';
+import { useGetAllCategoriesQuery } from '../../redux/features/management/categoryApi';
+import { useGetAllSellerQuery } from '../../redux/features/management/sellerApi';
+import { useGetAllBrandsQuery } from '../../redux/features/management/brandApi';
+import { useCreateSaleMutation } from '../../redux/features/management/saleApi';
 
 const ProductManagePage = () => {
   const [current, setCurrent] = useState(1);
@@ -26,7 +27,7 @@ const ProductManagePage = () => {
     limit: 10,
   });
 
-  const {data: products, isFetching} = useGetAllProductsQuery(query);
+  const { data: products, isFetching } = useGetAllProductsQuery(query);
 
   const onChange: PaginationProps['onChange'] = (page) => {
     setCurrent(page);
@@ -83,7 +84,7 @@ const ProductManagePage = () => {
       align: 'center',
       render: (item) => {
         return (
-          <div style={{display: 'flex'}}>
+          <div style={{ display: 'flex' }}>
             <SellProductModal product={item} />
             <AddStockModal product={item} />
             <UpdateProductModal product={item} />
@@ -105,7 +106,7 @@ const ProductManagePage = () => {
         dataSource={tableData}
         pagination={false}
       />
-      <Flex justify='center' style={{marginTop: '1rem'}}>
+      <Flex justify='center' style={{ marginTop: '1rem' }}>
         <Pagination
           current={current}
           onChange={onChange}
@@ -120,68 +121,36 @@ const ProductManagePage = () => {
 /**
  * Sell Product Modal
  */
-const SellProductModal = ({product}: {product: IProduct}) => {
+const SellProductModal = ({ product }: { product: IProduct & { key: string } }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const {handleSubmit} = useForm();
-
-  console.log(product);
-
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
-  };
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  return (
-    <>
-      <Button
-        onClick={showModal}
-        type='primary'
-        className='table-btn'
-        style={{backgroundColor: 'royalblue'}}
-      >
-        Sell
-      </Button>
-      <Modal title='Sell Product' open={isModalOpen} onCancel={handleCancel} footer={null}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <h1>Working on it...!!!</h1>
-          <Button htmlType='submit'>Submit</Button>
-        </form>
-      </Modal>
-    </>
-  );
-};
-
-/**
- * Add Stock Modal
- */
-const AddStockModal = ({product}: {product: IProduct & {key: string}}) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const {handleSubmit, register, reset} = useForm();
-  const [addToStock] = useAddStockMutation();
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const [saleProduct] = useCreateSaleMutation();
 
   const onSubmit = async (data: FieldValues) => {
     const payload = {
-      stock: Number(data.stock),
-      seller: product.seller,
+      product: product.key,
+      productName: product.name,
+      productPrice: product.price,
+      quantity: Number(data.quantity),
+      buyerName: data.buyerName,
+      date: data.date,
     };
-
     try {
-      const res = await addToStock({id: product.key, payload}).unwrap();
-      if (res.statusCode === 200) {
-        toastMessage({icon: 'success', text: res.message});
+      const res = await saleProduct(payload).unwrap();
+      if (res.statusCode === 201) {
+        toastMessage({ icon: 'success', text: res.message });
         reset();
         handleCancel();
       }
     } catch (error: any) {
+      console.log(error);
       handleCancel();
-      toastMessage({icon: 'error', text: error.data.message});
+      toastMessage({ icon: 'error', text: error.data.message });
     }
   };
 
@@ -199,14 +168,96 @@ const AddStockModal = ({product}: {product: IProduct & {key: string}}) => {
         onClick={showModal}
         type='primary'
         className='table-btn'
-        style={{backgroundColor: 'blue'}}
+        style={{ backgroundColor: 'royalblue' }}
+      >
+        Sell
+      </Button>
+      <Modal title='Sell Product' open={isModalOpen} onCancel={handleCancel} footer={null}>
+        <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: '1rem' }}>
+          <CustomInput
+            name='buyerName'
+            label='Buyer Name'
+            errors={errors}
+            required={true}
+            register={register}
+            type='text'
+          />
+          <CustomInput
+            name='date'
+            label='Selling date'
+            errors={errors}
+            required={true}
+            register={register}
+            type='date'
+          />
+          <CustomInput
+            name='quantity'
+            label='Quantity'
+            errors={errors}
+            required={true}
+            register={register}
+            type='number'
+          />
+          <Flex justify='center' style={{ marginTop: '1rem' }}>
+            <Button htmlType='submit' type='primary'>
+              Sell Product
+            </Button>
+          </Flex>
+        </form>
+      </Modal>
+    </>
+  );
+};
+
+/**
+ * Add Stock Modal
+ */
+const AddStockModal = ({ product }: { product: IProduct & { key: string } }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { handleSubmit, register, reset } = useForm();
+  const [addToStock] = useAddStockMutation();
+
+  const onSubmit = async (data: FieldValues) => {
+    const payload = {
+      stock: Number(data.stock),
+      seller: product.seller,
+    };
+
+    try {
+      const res = await addToStock({ id: product.key, payload }).unwrap();
+      if (res.statusCode === 200) {
+        toastMessage({ icon: 'success', text: res.message });
+        reset();
+        handleCancel();
+      }
+    } catch (error: any) {
+      handleCancel();
+      toastMessage({ icon: 'error', text: error.data.message });
+    }
+  };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <Button
+        onClick={showModal}
+        type='primary'
+        className='table-btn'
+        style={{ backgroundColor: 'blue' }}
       >
         Add Stock
       </Button>
       <Modal title='Add Product to Stock' open={isModalOpen} onCancel={handleCancel} footer={null}>
-        <form onSubmit={handleSubmit(onSubmit)} style={{margin: '2rem'}}>
+        <form onSubmit={handleSubmit(onSubmit)} style={{ margin: '2rem' }}>
           <CustomInput name='stock' label='Add Stock' register={register} type='number' />
-          <Flex justify='center' style={{marginTop: '1rem'}}>
+          <Flex justify='center' style={{ marginTop: '1rem' }}>
             <Button htmlType='submit' type='primary'>
               Submit
             </Button>
@@ -220,16 +271,16 @@ const AddStockModal = ({product}: {product: IProduct & {key: string}}) => {
 /**
  * Update Product Modal
  */
-const UpdateProductModal = ({product}: {product: IProduct & {key: string}}) => {
+const UpdateProductModal = ({ product }: { product: IProduct & { key: string } }) => {
   const [updateProduct] = useUpdateProductMutation();
-  const {data: categories} = useGetAllCategoriesQuery(undefined);
-  const {data: sellers, isLoading: isSellerLoading} = useGetAllSellerQuery(undefined);
-  const {data: brands} = useGetAllBrandsQuery(undefined);
+  const { data: categories } = useGetAllCategoriesQuery(undefined);
+  const { data: sellers, isLoading: isSellerLoading } = useGetAllSellerQuery(undefined);
+  const { data: brands } = useGetAllBrandsQuery(undefined);
 
   const {
     handleSubmit,
     register,
-    formState: {errors},
+    formState: { errors },
     reset,
   } = useForm({
     defaultValues: {
@@ -246,15 +297,15 @@ const UpdateProductModal = ({product}: {product: IProduct & {key: string}}) => {
 
   const onSubmit = async (data: FieldValues) => {
     try {
-      const res = await updateProduct({id: product.key, payload: data}).unwrap();
+      const res = await updateProduct({ id: product.key, payload: data }).unwrap();
       if (res.statusCode === 200) {
-        toastMessage({icon: 'success', text: res.message});
+        toastMessage({ icon: 'success', text: res.message });
         reset();
         handleCancel();
       }
     } catch (error: any) {
       handleCancel();
-      toastMessage({icon: 'error', text: error.data.message});
+      toastMessage({ icon: 'error', text: error.data.message });
     }
   };
 
@@ -272,7 +323,7 @@ const UpdateProductModal = ({product}: {product: IProduct & {key: string}}) => {
         onClick={showModal}
         type='primary'
         className='table-btn-small'
-        style={{backgroundColor: 'green'}}
+        style={{ backgroundColor: 'green' }}
       >
         <EditFilled />
       </Button>
@@ -294,15 +345,15 @@ const UpdateProductModal = ({product}: {product: IProduct & {key: string}}) => {
             required={true}
           />
           <Row>
-            <Col xs={{span: 23}} lg={{span: 6}}>
+            <Col xs={{ span: 23 }} lg={{ span: 6 }}>
               <label htmlFor='Size' className='label'>
                 Seller
               </label>
             </Col>
-            <Col xs={{span: 23}} lg={{span: 18}}>
+            <Col xs={{ span: 23 }} lg={{ span: 18 }}>
               <select
                 disabled={isSellerLoading}
-                {...register('seller', {required: true})}
+                {...register('seller', { required: true })}
                 className={`input-field ${errors['seller'] ? 'input-field-error' : ''}`}
               >
                 <option value=''>Select Seller*</option>
@@ -316,14 +367,14 @@ const UpdateProductModal = ({product}: {product: IProduct & {key: string}}) => {
           </Row>
 
           <Row>
-            <Col xs={{span: 23}} lg={{span: 6}}>
+            <Col xs={{ span: 23 }} lg={{ span: 6 }}>
               <label htmlFor='Size' className='label'>
                 Category
               </label>
             </Col>
-            <Col xs={{span: 23}} lg={{span: 18}}>
+            <Col xs={{ span: 23 }} lg={{ span: 18 }}>
               <select
-                {...register('category', {required: true})}
+                {...register('category', { required: true })}
                 className={`input-field ${errors['category'] ? 'input-field-error' : ''}`}
               >
                 <option value=''>Select Category*</option>
@@ -337,12 +388,12 @@ const UpdateProductModal = ({product}: {product: IProduct & {key: string}}) => {
           </Row>
 
           <Row>
-            <Col xs={{span: 23}} lg={{span: 6}}>
+            <Col xs={{ span: 23 }} lg={{ span: 6 }}>
               <label htmlFor='Size' className='label'>
                 Brand
               </label>
             </Col>
-            <Col xs={{span: 23}} lg={{span: 18}}>
+            <Col xs={{ span: 23 }} lg={{ span: 18 }}>
               <select
                 {...register('brand')}
                 className={`input-field ${errors['brand'] ? 'input-field-error' : ''}`}
@@ -360,12 +411,12 @@ const UpdateProductModal = ({product}: {product: IProduct & {key: string}}) => {
           <CustomInput label='Description' name='description' register={register} />
 
           <Row>
-            <Col xs={{span: 23}} lg={{span: 6}}>
+            <Col xs={{ span: 23 }} lg={{ span: 6 }}>
               <label htmlFor='Size' className='label'>
                 Size
               </label>
             </Col>
-            <Col xs={{span: 23}} lg={{span: 18}}>
+            <Col xs={{ span: 23 }} lg={{ span: 18 }}>
               <select className={`input-field`} {...register('size')}>
                 <option value=''>Select Product Size</option>
                 <option value='SMALL'>Small</option>
@@ -378,7 +429,7 @@ const UpdateProductModal = ({product}: {product: IProduct & {key: string}}) => {
             <Button
               htmlType='submit'
               type='primary'
-              style={{textTransform: 'uppercase', fontWeight: 'bold'}}
+              style={{ textTransform: 'uppercase', fontWeight: 'bold' }}
             >
               Update
             </Button>
@@ -392,7 +443,7 @@ const UpdateProductModal = ({product}: {product: IProduct & {key: string}}) => {
 /**
  * Delete Product Modal
  */
-const DeleteProductModal = ({id}: {id: string}) => {
+const DeleteProductModal = ({ id }: { id: string }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteProduct] = useDeleteProductMutation();
 
@@ -408,12 +459,12 @@ const DeleteProductModal = ({id}: {id: string}) => {
     try {
       const res = await deleteProduct(id).unwrap();
       if (res.statusCode === 200) {
-        toastMessage({icon: 'success', text: res.message});
+        toastMessage({ icon: 'success', text: res.message });
         handleCancel();
       }
     } catch (error: any) {
       handleCancel();
-      toastMessage({icon: 'error', text: error.data.message});
+      toastMessage({ icon: 'error', text: error.data.message });
     }
   };
 
@@ -423,26 +474,28 @@ const DeleteProductModal = ({id}: {id: string}) => {
         onClick={showModal}
         type='primary'
         className='table-btn-small'
-        style={{backgroundColor: 'red'}}
+        style={{ backgroundColor: 'red' }}
       >
         <DeleteFilled />
       </Button>
       <Modal title='Delete Product' open={isModalOpen} onCancel={handleCancel} footer={null}>
-        <div style={{textAlign: 'center', padding: '2rem'}}>
+        <div style={{ textAlign: 'center', padding: '2rem' }}>
           <h2>Are you want to delete this product?</h2>
           <h4>You won't be able to revert it.</h4>
-          <div style={{display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem'}}>
+          <div
+            style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem' }}
+          >
             <Button
               onClick={handleCancel}
               type='primary'
-              style={{backgroundColor: 'lightseagreen'}}
+              style={{ backgroundColor: 'lightseagreen' }}
             >
               Cancel
             </Button>
             <Button
               onClick={() => handleDelete(id)}
               type='primary'
-              style={{backgroundColor: 'red'}}
+              style={{ backgroundColor: 'red' }}
             >
               Yes! Delete
             </Button>
