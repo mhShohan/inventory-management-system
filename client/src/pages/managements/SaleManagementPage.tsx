@@ -3,10 +3,11 @@ import type { PaginationProps, TableColumnsType } from 'antd';
 import { Button, Flex, Modal, Pagination, Table } from 'antd';
 import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
-import { useGetAllSaleQuery } from '../../redux/features/management/saleApi';
+import { useDeleteSaleMutation, useGetAllSaleQuery } from '../../redux/features/management/saleApi';
 import { IProduct } from '../../types/product.types';
 import { ITableSale } from '../../types/sale.type';
 import formatDate from '../../utils/formatDate';
+import toastMessage from '../../lib/toastMessage';
 
 const SaleManagementPage = () => {
   const [query, setQuery] = useState({
@@ -74,7 +75,7 @@ const SaleManagementPage = () => {
         return (
           <div style={{ display: 'flex' }}>
             <UpdateModal product={item} />
-            <DeleteModal />
+            <DeleteModal id={item.key} />
           </div>
         );
       },
@@ -110,10 +111,8 @@ const UpdateModal = ({ product }: { product: IProduct }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { handleSubmit } = useForm();
 
-  console.log(product);
-
   const onSubmit = (data: FieldValues) => {
-    console.log(data);
+    console.log({ product, data });
   };
 
   const showModal = () => {
@@ -123,6 +122,9 @@ const UpdateModal = ({ product }: { product: IProduct }) => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  // ! Remove the first return to work on this component
+  return;
 
   return (
     <>
@@ -147,8 +149,22 @@ const UpdateModal = ({ product }: { product: IProduct }) => {
 /**
  * Delete Modal
  */
-const DeleteModal = () => {
+const DeleteModal = ({ id }: { id: string }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteSale] = useDeleteSaleMutation();
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await deleteSale(id).unwrap();
+      if (res.statusCode === 200) {
+        toastMessage({ icon: 'success', text: res.message });
+        handleCancel();
+      }
+    } catch (error: any) {
+      handleCancel();
+      toastMessage({ icon: 'error', text: error.data.message });
+    }
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -169,7 +185,28 @@ const DeleteModal = () => {
         <DeleteFilled />
       </Button>
       <Modal title='Delete Product' open={isModalOpen} onCancel={handleCancel} footer={null}>
-        <h1>Working on it...!!!</h1>
+        <div style={{ textAlign: 'center', padding: '2rem' }}>
+          <h2>Are you want to delete this product?</h2>
+          <h4>You won't be able to revert it.</h4>
+          <div
+            style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem' }}
+          >
+            <Button
+              onClick={handleCancel}
+              type='primary'
+              style={{ backgroundColor: 'lightseagreen' }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => handleDelete(id)}
+              type='primary'
+              style={{ backgroundColor: 'red' }}
+            >
+              Yes! Delete
+            </Button>
+          </div>
+        </div>
       </Modal>
     </>
   );
