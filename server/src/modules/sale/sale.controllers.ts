@@ -33,7 +33,12 @@ class SaleControllers {
       success: true,
       statusCode: httpStatus.OK,
       message: 'All sales retrieved successfully',
-      meta: { page, limit, total: result?.totalCount[0]?.total || 0 },
+      meta: {
+        page,
+        limit,
+        total: result?.totalCount[0]?.total || 0,
+        totalPage: Math.ceil(result?.totalCount[0]?.total / limit)
+      },
       data: result.data
     });
   });
