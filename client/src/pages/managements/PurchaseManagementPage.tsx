@@ -1,12 +1,16 @@
-import {DeleteFilled, EditFilled} from '@ant-design/icons';
-import type {PaginationProps, TableColumnsType} from 'antd';
-import {Button, Flex, Modal, Pagination, Table} from 'antd';
-import {useState} from 'react';
-import {FieldValues, useForm} from 'react-hook-form';
-import {useGetAllPurchasesQuery} from '../../redux/features/management/purchaseApi';
-import {IProduct} from '../../types/product.types';
-import {IPurchase} from '../../types/purchase.types';
+import { DeleteFilled, EditFilled } from '@ant-design/icons';
+import type { PaginationProps, TableColumnsType } from 'antd';
+import { Button, Flex, Modal, Pagination, Table } from 'antd';
+import { useState } from 'react';
+import { FieldValues, useForm } from 'react-hook-form';
+import {
+  useDeletePurchaseMutation,
+  useGetAllPurchasesQuery,
+} from '../../redux/features/management/purchaseApi';
+import { IProduct } from '../../types/product.types';
+import { IPurchase } from '../../types/purchase.types';
 import formatDate from '../../utils/formatDate';
+import toastMessage from '../../lib/toastMessage';
 
 const PurchaseManagementPage = () => {
   const [query, setQuery] = useState({
@@ -14,10 +18,10 @@ const PurchaseManagementPage = () => {
     limit: 10,
   });
 
-  const {data, isFetching} = useGetAllPurchasesQuery(query);
+  const { data, isFetching } = useGetAllPurchasesQuery(query);
 
   const onChange: PaginationProps['onChange'] = (page) => {
-    setQuery((prev) => ({...prev, page: page}));
+    setQuery((prev) => ({ ...prev, page: page }));
   };
 
   const tableData = data?.data?.map((purchase: IPurchase) => ({
@@ -78,9 +82,9 @@ const PurchaseManagementPage = () => {
       align: 'center',
       render: (item) => {
         return (
-          <div style={{display: 'flex'}}>
+          <div style={{ display: 'flex' }}>
             <UpdateModal product={item} />
-            <DeleteModal />
+            <DeleteModal id={item.key} />
           </div>
         );
       },
@@ -97,7 +101,7 @@ const PurchaseManagementPage = () => {
         dataSource={tableData}
         pagination={false}
       />
-      <Flex justify='center' style={{marginTop: '1rem'}}>
+      <Flex justify='center' style={{ marginTop: '1rem' }}>
         <Pagination
           current={query.page}
           onChange={onChange}
@@ -112,14 +116,12 @@ const PurchaseManagementPage = () => {
 /**
  * Update Modal
  */
-const UpdateModal = ({product}: {product: IProduct}) => {
+const UpdateModal = ({ product }: { product: IProduct }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const {handleSubmit} = useForm();
-
-  console.log(product);
+  const { handleSubmit } = useForm();
 
   const onSubmit = (data: FieldValues) => {
-    console.log(data);
+    console.log({ data, product });
   };
 
   const showModal = () => {
@@ -130,13 +132,15 @@ const UpdateModal = ({product}: {product: IProduct}) => {
     setIsModalOpen(false);
   };
 
+  // ! This is not complete, need to complete this to make it work
+  return;
   return (
     <>
       <Button
         onClick={showModal}
         type='primary'
         className='table-btn-small'
-        style={{backgroundColor: 'green'}}
+        style={{ backgroundColor: 'green' }}
       >
         <EditFilled />
       </Button>
@@ -153,8 +157,22 @@ const UpdateModal = ({product}: {product: IProduct}) => {
 /**
  * Delete Modal
  */
-const DeleteModal = () => {
+const DeleteModal = ({ id }: { id: string }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deletePurchase] = useDeletePurchaseMutation();
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await deletePurchase(id).unwrap();
+      if (res.statusCode === 200) {
+        toastMessage({ icon: 'success', text: res.message });
+        handleCancel();
+      }
+    } catch (error: any) {
+      handleCancel();
+      toastMessage({ icon: 'error', text: error.data.message });
+    }
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -170,12 +188,33 @@ const DeleteModal = () => {
         onClick={showModal}
         type='primary'
         className='table-btn-small'
-        style={{backgroundColor: 'red'}}
+        style={{ backgroundColor: 'red' }}
       >
         <DeleteFilled />
       </Button>
       <Modal title='Delete Product' open={isModalOpen} onCancel={handleCancel} footer={null}>
-        <h1>Working on it...!!!</h1>
+        <div style={{ textAlign: 'center', padding: '2rem' }}>
+          <h2>Are you want to delete this product?</h2>
+          <h4>You won't be able to revert it.</h4>
+          <div
+            style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem' }}
+          >
+            <Button
+              onClick={handleCancel}
+              type='primary'
+              style={{ backgroundColor: 'lightseagreen' }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => handleDelete(id)}
+              type='primary'
+              style={{ backgroundColor: 'red' }}
+            >
+              Yes! Delete
+            </Button>
+          </div>
+        </div>
       </Modal>
     </>
   );

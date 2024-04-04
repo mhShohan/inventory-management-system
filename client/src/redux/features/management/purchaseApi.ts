@@ -18,7 +18,14 @@ const purchaseApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['purchases']
     }),
+    deletePurchase: builder.mutation({
+      query: (id) => ({
+        url: '/purchases/' + id,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['purchases']
+    }),
   })
 })
 
-export const { useGetAllPurchasesQuery, useCreatePurchaseMutation } = purchaseApi
+export const { useGetAllPurchasesQuery, useCreatePurchaseMutation, useDeletePurchaseMutation } = purchaseApi

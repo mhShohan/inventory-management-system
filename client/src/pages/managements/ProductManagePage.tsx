@@ -40,8 +40,8 @@ const ProductManagePage = () => {
     categoryName: product.category.name,
     price: product.price,
     stock: product.stock,
-    seller: product.seller,
-    sellerName: product.seller.name,
+    seller: product?.seller,
+    sellerName: product?.seller?.name || 'DELETED SELLER',
     brand: product.brand,
     size: product.size,
     description: product.description,
@@ -76,7 +76,10 @@ const ProductManagePage = () => {
       key: 'sellerName',
       dataIndex: 'sellerName',
       align: 'center',
-      render: (sellerName: string) => <Tag>{sellerName}</Tag>,
+      render: (sellerName: string) => {
+        if (sellerName === 'DELETED SELLER') return <Tag color='red'>{sellerName}</Tag>;
+        return <Tag color='green'>{sellerName}</Tag>;
+      },
     },
     {
       title: 'Action',
@@ -286,7 +289,7 @@ const UpdateProductModal = ({ product }: { product: IProduct & { key: string } }
     defaultValues: {
       name: product.name,
       price: product.price,
-      seller: product.seller._id,
+      seller: product?.seller?._id,
       category: product.category._id,
       brand: product.brand?._id,
       description: product.description,

@@ -17,7 +17,14 @@ const sellerApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['seller']
     }),
+    deleteSeller: builder.mutation({
+      query: (id) => ({
+        url: '/sellers/' + id,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['seller']
+    }),
   })
 })
 
-export const { useGetAllSellerQuery, useCreateSellerMutation } = sellerApi
+export const { useGetAllSellerQuery, useCreateSellerMutation, useDeleteSellerMutation } = sellerApi
