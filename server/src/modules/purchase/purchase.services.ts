@@ -25,8 +25,18 @@ class PurchaseServices extends BaseServices<any> {
    * Read all category of user
    */
   async getAll(userId: string, query: Record<string, unknown>) {
+    const search = query.search ? query.search : '';
+
     const data = await this.model.aggregate([
-      { $match: { user: new Types.ObjectId(userId) } },
+      {
+        $match: {
+          user: new Types.ObjectId(userId),
+          $or: [
+            { sellerName: { $regex: search, $options: 'i' } },
+            { productName: { $regex: search, $options: 'i' } }
+          ]
+        }
+      },
       ...sortAndPaginatePipeline(query)
     ]);
 

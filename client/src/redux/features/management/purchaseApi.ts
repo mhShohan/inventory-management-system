@@ -10,6 +10,7 @@ const purchaseApi = baseApi.injectEndpoints({
       }),
       providesTags: ['purchases']
     }),
+
     createPurchase: builder.mutation({
       query: (payload) => ({
         url: '/purchases',
@@ -18,6 +19,7 @@ const purchaseApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['purchases']
     }),
+
     deletePurchase: builder.mutation({
       query: (id) => ({
         url: '/purchases/' + id,

@@ -11,11 +11,13 @@ import { IProduct } from '../../types/product.types';
 import { IPurchase } from '../../types/purchase.types';
 import formatDate from '../../utils/formatDate';
 import toastMessage from '../../lib/toastMessage';
+import SearchInput from '../../components/SearchInput';
 
 const PurchaseManagementPage = () => {
   const [query, setQuery] = useState({
     page: 1,
     limit: 10,
+    search: '',
   });
 
   const { data, isFetching } = useGetAllPurchasesQuery(query);
@@ -94,6 +96,9 @@ const PurchaseManagementPage = () => {
 
   return (
     <>
+      <Flex justify='end' style={{ margin: '5px' }}>
+        <SearchInput setQuery={setQuery} placeholder='Search Purchase...' />
+      </Flex>
       <Table
         size='small'
         loading={isFetching}
