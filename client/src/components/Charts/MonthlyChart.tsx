@@ -8,12 +8,12 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { useMonthlySaleQuery } from '../redux/features/management/saleApi';
-import { months } from '../utils/generateDate';
+import { useMonthlySaleQuery } from '../../redux/features/management/saleApi';
+import { months } from '../../utils/generateDate';
 import { Flex } from 'antd';
-import Loader from './Loader';
+import Loader from '../Loader';
 
-const Chart = () => {
+const MonthlyChart = () => {
   const { data: monthlyData, isLoading } = useMonthlySaleQuery(undefined);
 
   if (isLoading)
@@ -44,4 +44,4 @@ const Chart = () => {
   );
 };
 
-export default Chart;
+export default MonthlyChart;

@@ -39,11 +39,11 @@ export const sidebarItems = [
     label: <NavLink to='/purchases'>MANAGE PURCHASES</NavLink>,
     icon: React.createElement(HistoryOutlined),
   },
-  {
-    key: 'Sales History',
-    label: <NavLink to='/sales-history'>SALES HISTORY</NavLink>,
-    icon: React.createElement(HistoryOutlined),
-  },
+  // {
+  //   key: 'Sales History',
+  //   label: <NavLink to='/sales-history'>SALES HISTORY</NavLink>,
+  //   icon: React.createElement(HistoryOutlined),
+  // },
   {
     key: 'Profile',
     label: <NavLink to='/profile'>PROFILE</NavLink>,

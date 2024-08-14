@@ -12,7 +12,15 @@ const userSchema = new Schema<IUser>(
     description: { type: String },
     avatar: { type: String },
     role: { type: String, enum: UserRole, default: 'USER' },
-    status: { type: String, enum: UserStatus, default: 'ACTIVE' }
+    status: { type: String, enum: UserStatus, default: 'ACTIVE' },
+    address: { type: String },
+    phone: { type: String },
+    city: { type: String },
+    country: { type: String },
+    facebook: { type: String },
+    twitter: { type: String },
+    linkedin: { type: String },
+    instagram: { type: String },
   },
   { timestamps: true }
 );

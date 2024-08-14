@@ -7,8 +7,6 @@ const ProfilePage = () => {
 
   if (isLoading) return <Loader />;
 
-  console.log(data);
-
   return (
     <Flex justify='center' align='center' style={{ minHeight: 'calc(100vh - 10rem)' }}>
       <Flex

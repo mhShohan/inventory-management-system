@@ -9,4 +9,12 @@ export interface IUser {
   avatar?: string;
   password: string;
   status: TUserStatus;
+  address?: string;
+  phone?: string
+  city?: string;
+  country?: string;
+  facebook?: string;
+  twitter?: string;
+  linkedin?: string;
+  instagram?: string;
 }

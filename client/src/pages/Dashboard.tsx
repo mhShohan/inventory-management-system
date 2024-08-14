@@ -1,8 +1,9 @@
 import { Col, Row } from 'antd';
+import MonthlyChart from '../components/Charts/MonthlyChart';
 import Loader from '../components/Loader';
 import { useCountProductsQuery } from '../redux/features/management/productApi';
 import { useYearlySaleQuery } from '../redux/features/management/saleApi';
-import Chart from '../components/Chart';
+import DailyChart from '../components/Charts/DailyChart';
 
 const Dashboard = () => {
   const { data: products, isLoading } = useCountProductsQuery(undefined);
@@ -34,6 +35,7 @@ const Dashboard = () => {
             <div className='number-card'>
               <h3>Total Revenue</h3>
               <h1>
+                $
                 {yearlyData?.data.reduce(
                   (acc: number, cur: { totalRevenue: number }) => (acc += cur.totalRevenue),
                   0
@@ -50,8 +52,19 @@ const Dashboard = () => {
             borderRadius: '10px',
           }}
         >
+          <h1 style={{ textAlign: 'center', marginBottom: '.5rem' }}>Daily Sale and Revenue</h1>
+          <DailyChart />
+        </div>
+        <div
+          style={{
+            border: '1px solid gray',
+            margin: '1rem',
+            padding: '1rem',
+            borderRadius: '10px',
+          }}
+        >
           <h1 style={{ textAlign: 'center', marginBottom: '.5rem' }}>Monthly Revenue</h1>
-          <Chart />
+          <MonthlyChart />
         </div>
       </>
     );
