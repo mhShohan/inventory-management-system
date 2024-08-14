@@ -30,6 +30,7 @@ const SearchInput = ({ setQuery, placeholder = 'Search…' }: SearchInputProps) 
     <div>
       <Input
         size='large'
+        style={{ minWidth: '300px' }}
         placeholder={placeholder}
         onChange={(e) => setSearchTerm(e.target.value)}
         prefix={<SearchOutlined />}

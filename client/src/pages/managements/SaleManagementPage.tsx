@@ -3,16 +3,18 @@ import type { PaginationProps, TableColumnsType } from 'antd';
 import { Button, Flex, Modal, Pagination, Table } from 'antd';
 import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
+import SearchInput from '../../components/SearchInput';
+import toastMessage from '../../lib/toastMessage';
 import { useDeleteSaleMutation, useGetAllSaleQuery } from '../../redux/features/management/saleApi';
 import { IProduct } from '../../types/product.types';
 import { ITableSale } from '../../types/sale.type';
 import formatDate from '../../utils/formatDate';
-import toastMessage from '../../lib/toastMessage';
 
 const SaleManagementPage = () => {
   const [query, setQuery] = useState({
     page: 1,
     limit: 10,
+    search: '',
   });
 
   const { data, isFetching } = useGetAllSaleQuery(query);
@@ -83,8 +85,20 @@ const SaleManagementPage = () => {
     },
   ];
 
+  // const onDateChange: DatePickerProps['onChange'] = (_date, dateString) => {
+  //   setDate(dateString as string);
+  // };
+
   return (
     <>
+      <Flex justify='end' style={{ margin: '5px', gap: 4 }}>
+        {/* <DatePicker
+          onChange={onDateChange}
+          placeholder='Search by Selling date...'
+          style={{ minWidth: '250px' }}
+        /> */}
+        <SearchInput setQuery={setQuery} placeholder='Search Sold Products...' />
+      </Flex>
       <Table
         size='small'
         loading={isFetching}
