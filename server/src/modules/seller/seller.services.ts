@@ -22,10 +22,18 @@ class SellerServices extends BaseServices<any> {
    *  Get all sale
    */
   async readAll(query: Record<string, unknown> = {}, userId: string) {
+
+    const search = query.search ? query.search : '';
+
     const data = await this.model.aggregate([
       {
         $match: {
-          user: new Types.ObjectId(userId)
+          user: new Types.ObjectId(userId),
+          $or: [
+            { name: { $regex: search, $options: 'i' } },
+            { email: { $regex: search, $options: 'i' } },
+            { contactNo: { $regex: search, $options: 'i' } }
+          ]
         }
       },
       ...sortAndPaginatePipeline(query)

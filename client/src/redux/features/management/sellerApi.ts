@@ -3,9 +3,10 @@ import { baseApi } from "../baseApi";
 const sellerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllSeller: builder.query({
-      query: () => ({
+      query: (query) => ({
         url: '/sellers',
-        method: 'GET'
+        method: 'GET',
+        params: query
       }),
       providesTags: ['seller']
     }),

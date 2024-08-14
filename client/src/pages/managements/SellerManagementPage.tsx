@@ -9,11 +9,13 @@ import {
 } from '../../redux/features/management/sellerApi';
 import { IProduct, ISeller } from '../../types/product.types';
 import toastMessage from '../../lib/toastMessage';
+import SearchInput from '../../components/SearchInput';
 
 const SellerManagementPage = () => {
   const [query, setQuery] = useState({
     page: 1,
     limit: 10,
+    search: '',
   });
 
   const { data, isFetching } = useGetAllSellerQuery(query);
@@ -65,6 +67,9 @@ const SellerManagementPage = () => {
 
   return (
     <>
+      <Flex justify='end' style={{ margin: '5px' }}>
+        <SearchInput setQuery={setQuery} placeholder='Search Seller...' />
+      </Flex>
       <Table
         size='small'
         loading={isFetching}
