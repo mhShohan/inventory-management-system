@@ -44,7 +44,7 @@ class UserControllers {
 
   // update profile
   updateProfile = asyncHandler(async (req, res) => {
-    const result = await this.services.updateProfile(req.params.id, req.body);
+    const result = await this.services.updateProfile(req.user._id, req.body);
 
     sendResponse(res, {
       success: true,

@@ -11,8 +11,6 @@ const ProfilePage = () => {
 
   if (isLoading) return <Loader />;
 
-  console.log(data);
-
   return (
     <>
       <Flex vertical style={{ minHeight: 'calc(100vh - 10rem)' }}>
@@ -28,7 +26,7 @@ const ProfilePage = () => {
             }}
           >
             <img
-              src={userProPic}
+              src={data?.data?.avatar || userProPic}
               alt='user'
               style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
             />
@@ -80,7 +78,7 @@ const ProfileInfoItems = ({ keyName, value }: { keyName: string; value: string }
   return (
     <Flex style={{ width: '100%' }} gap={24}>
       <h2 style={{ flex: 1, fontWeight: '700', textTransform: 'capitalize' }}>{keyName}</h2>
-      <h3 style={{ flex: 4, fontWeight: '600' }}>{value}</h3>
+      <h3 style={{ flex: 4, fontWeight: '500' }}>{value}</h3>
     </Flex>
   );
 };

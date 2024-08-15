@@ -10,6 +10,6 @@ userRoutes.post('/register', validateRequest(userValidator.registerSchema), user
 userRoutes.post('/login', validateRequest(userValidator.loginSchema), userControllers.login);
 userRoutes.get('/self', verifyAuth, userControllers.getSelf);
 userRoutes.post('/change-password', verifyAuth, validateRequest(userValidator.changePasswordSchema), userControllers.changePassword);
-userRoutes.post('/:id', verifyAuth, validateRequest(userValidator.updatedProfileSchema), userControllers.updateProfile);
+userRoutes.patch('/', verifyAuth, userControllers.updateProfile);
 
 export default userRoutes;

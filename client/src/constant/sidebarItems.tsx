@@ -1,12 +1,14 @@
+import {
+  AimOutlined,
+  AntDesignOutlined,
+  ApartmentOutlined,
+  AreaChartOutlined,
+  MoneyCollectFilled,
+  ProfileFilled,
+  UserOutlined,
+} from '@ant-design/icons';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  UserOutlined,
-  AntDesignOutlined,
-  ProfileFilled,
-  MoneyCollectFilled,
-  HistoryOutlined,
-} from '@ant-design/icons';
 
 export const sidebarItems = [
   {
@@ -27,17 +29,17 @@ export const sidebarItems = [
   {
     key: 'Manage Sales',
     label: <NavLink to='/sales'>MANAGE SALES</NavLink>,
-    icon: React.createElement(HistoryOutlined),
+    icon: React.createElement(AreaChartOutlined),
   },
   {
     key: 'Manage Seller',
     label: <NavLink to='/sellers'>MANAGE SELLERS</NavLink>,
-    icon: React.createElement(HistoryOutlined),
+    icon: React.createElement(ApartmentOutlined),
   },
   {
     key: 'Manage Purchase',
     label: <NavLink to='/purchases'>MANAGE PURCHASES</NavLink>,
-    icon: React.createElement(HistoryOutlined),
+    icon: React.createElement(AimOutlined),
   },
   // {
   //   key: 'Sales History',
