@@ -10,6 +10,7 @@ const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['product', 'sale', 'user']
     }),
+
     register: builder.mutation({
       query: (payload) => ({
         url: '/users/register',
@@ -18,6 +19,7 @@ const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['product', 'sale', 'user']
     }),
+
     getSelfProfile: builder.query({
       query: () => ({
         url: '/users/self',
@@ -25,7 +27,23 @@ const authApi = baseApi.injectEndpoints({
       }),
       providesTags: ['user']
     }),
+
+    changePassword: builder.mutation({
+      query: (payload) => ({
+        url: '/users/change-password',
+        method: 'POST',
+        body: payload
+      }),
+      invalidatesTags: ['user']
+    }),
+
+
   })
 })
 
-export const { useLoginMutation, useRegisterMutation, useGetSelfProfileQuery } = authApi
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useGetSelfProfileQuery,
+  useChangePasswordMutation
+} = authApi

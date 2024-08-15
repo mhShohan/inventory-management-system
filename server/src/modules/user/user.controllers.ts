@@ -53,6 +53,18 @@ class UserControllers {
       data: result
     });
   });
+
+  // change Password
+  changePassword = asyncHandler(async (req, res) => {
+    const result = await this.services.changePassword(req.user._id, req.body);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'Password changed successfully!',
+      data: result
+    });
+  });
 }
 
 const userControllers = new UserControllers();

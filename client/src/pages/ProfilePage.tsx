@@ -4,6 +4,7 @@ import userProPic from '../assets/User.png';
 import Loader from '../components/Loader';
 import { useGetSelfProfileQuery } from '../redux/features/authApi';
 import { profileKeys } from '../constant/profile';
+import { Link } from 'react-router-dom';
 
 const ProfilePage = () => {
   const { data, isLoading } = useGetSelfProfileQuery(undefined);
@@ -36,14 +37,18 @@ const ProfilePage = () => {
 
         <Flex justify='center' style={{ margin: '1rem' }}>
           <Flex gap={16} wrap='wrap' justify='center'>
-            <Button type='primary'>
-              <EditOutlined />
-              Edit Profile
-            </Button>
-            <Button type='primary'>
-              <EditFilled />
-              Change Password
-            </Button>
+            <Link to='/edit-profile'>
+              <Button type='primary'>
+                <EditOutlined />
+                Edit Profile
+              </Button>
+            </Link>
+            <Link to='/change-password'>
+              <Button type='primary'>
+                <EditFilled />
+                Change Password
+              </Button>
+            </Link>
           </Flex>
         </Flex>
         <Row>

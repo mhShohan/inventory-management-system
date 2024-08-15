@@ -12,6 +12,8 @@ import ProductManagePage from '../pages/managements/ProductManagePage';
 import PurchaseManagementPage from '../pages/managements/PurchaseManagementPage';
 import SaleManagementPage from '../pages/managements/SaleManagementPage';
 import SellerManagementPage from '../pages/managements/SellerManagementPage';
+import ChangePasswordPage from '../pages/ChangePasswordPage';
+import EditProfilePage from '../pages/EditProfilePage';
 
 export const router = createBrowserRouter([
   {
@@ -79,6 +81,22 @@ export const router = createBrowserRouter([
         element: (
           <ProtectRoute>
             <SaleHistoryPage />
+          </ProtectRoute>
+        ),
+      },
+      {
+        path: 'edit-profile',
+        element: (
+          <ProtectRoute>
+            <EditProfilePage />
+          </ProtectRoute>
+        ),
+      },
+      {
+        path: 'change-password',
+        element: (
+          <ProtectRoute>
+            <ChangePasswordPage />
           </ProtectRoute>
         ),
       },
