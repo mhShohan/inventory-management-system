@@ -1,50 +1,81 @@
-import { Flex, Tag } from 'antd';
+import { EditFilled, EditOutlined } from '@ant-design/icons';
+import { Button, Col, Flex, Row } from 'antd';
+import userProPic from '../assets/User.png';
 import Loader from '../components/Loader';
 import { useGetSelfProfileQuery } from '../redux/features/authApi';
+import { profileKeys } from '../constant/profile';
 
 const ProfilePage = () => {
   const { data, isLoading } = useGetSelfProfileQuery(undefined);
 
   if (isLoading) return <Loader />;
 
+  console.log(data);
+
   return (
-    <Flex justify='center' align='center' style={{ minHeight: 'calc(100vh - 10rem)' }}>
-      <Flex
-        align='center'
-        style={{
-          minWidth: '400px',
-          border: '1px solid gray',
-          padding: '1rem',
-          borderRadius: '1rem',
-          gap: '1rem',
-        }}
-      >
-        <Flex
-          justify='center'
-          align='center'
-          style={{
-            width: '80px',
-            height: '80px',
-            backgroundColor: 'lightblue',
-            borderRadius: '50%',
-          }}
-        >
-          <h1>
-            {data?.data?.name
-              .split(' ')
-              .map((item: string) => item.charAt(0).toUpperCase())
-              .join('')}
-          </h1>
+    <>
+      <Flex vertical style={{ minHeight: 'calc(100vh - 10rem)' }}>
+        <Flex justify='center' style={{ width: '100%' }}>
+          <Flex
+            justify='center'
+            style={{
+              width: '250px',
+              height: '250px',
+              border: '2px solid gray',
+              padding: '.5rem',
+              borderRadius: '50%',
+            }}
+          >
+            <img
+              src={userProPic}
+              alt='user'
+              style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+            />
+          </Flex>
         </Flex>
-        <div>
-          <h1 style={{ lineHeight: '1.2rem' }}>Name: {data?.data?.name}</h1>
-          <h3> {data?.data?.email}</h3>
-          {data?.data.status === 'BLOCK' && <Tag color='red'>{data?.data.status}</Tag>}
-          {data?.data.status === 'ACTIVE' && <Tag color='green'>{data?.data.status}</Tag>}
-        </div>
+
+        <Flex justify='center' style={{ margin: '1rem' }}>
+          <Flex gap={16} wrap='wrap' justify='center'>
+            <Button type='primary'>
+              <EditOutlined />
+              Edit Profile
+            </Button>
+            <Button type='primary'>
+              <EditFilled />
+              Change Password
+            </Button>
+          </Flex>
+        </Flex>
+        <Row>
+          <Col xs={{ span: 24 }} lg={{ span: 4 }}></Col>
+          <Col
+            xs={{ span: 24 }}
+            lg={{ span: 16 }}
+            style={{
+              maxWidth: '700px',
+              border: '1px solid gray',
+              padding: '1rem 2rem',
+              borderRadius: '1rem',
+            }}
+          >
+            {profileKeys.map((key) => (
+              <ProfileInfoItems keyName={key.keyName} value={data?.data[key.keyName]} />
+            ))}
+          </Col>
+          <Col xs={{ span: 24 }} lg={{ span: 4 }}></Col>
+        </Row>
       </Flex>
-    </Flex>
+    </>
   );
 };
 
 export default ProfilePage;
+
+const ProfileInfoItems = ({ keyName, value }: { keyName: string; value: string }) => {
+  return (
+    <Flex style={{ width: '100%' }} gap={24}>
+      <h2 style={{ flex: 1, fontWeight: '700', textTransform: 'capitalize' }}>{keyName}</h2>
+      <h3 style={{ flex: 4, fontWeight: '600' }}>{value}</h3>
+    </Flex>
+  );
+};

@@ -8,7 +8,7 @@ import verifyPassword from '../../utils/verifyPassword';
 class UserServices {
   private model = User;
 
-  // register new user
+  // get profile
   async getSelf(userId: string) {
     return this.model.findById(userId);
   }
