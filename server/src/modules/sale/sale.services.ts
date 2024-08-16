@@ -1,6 +1,6 @@
 /* eslint-disable no-unsafe-finally */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import mongoose, { Types, } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import sortAndPaginatePipeline from '../../lib/sortAndPaginate.pipeline';
 import BaseServices from '../baseServices';
 import Sale from './sale.model';
@@ -50,17 +50,11 @@ class SaleServices extends BaseServices<any> {
     // const date = query.date ? query.date : null;
     const search = query.search ? (query.search as string) : '';
 
-
-
     const data = await this.model.aggregate([
       {
         $match: {
           user: new Types.ObjectId(userId),
-          $or: [
-            { productName: { $regex: search, $options: 'i' } },
-            { buyerName: { $regex: search, $options: 'i' } },
-
-          ],
+          $or: [{ productName: { $regex: search, $options: 'i' } }, { buyerName: { $regex: search, $options: 'i' } }]
         }
       },
       ...sortAndPaginatePipeline(query)

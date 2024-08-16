@@ -22,7 +22,6 @@ export const profileKeys = [
   { keyName: 'email' },
   { keyName: 'title' },
   { keyName: 'description' },
-  { keyName: 'role' },
   { keyName: 'status' },
   { keyName: 'address' },
   { keyName: 'phone' },

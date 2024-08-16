@@ -10,7 +10,7 @@ export interface IUser {
   password: string;
   status: TUserStatus;
   address?: string;
-  phone?: string
+  phone?: string;
   city?: string;
   country?: string;
   facebook?: string;

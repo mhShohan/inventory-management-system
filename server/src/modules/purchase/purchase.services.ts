@@ -31,10 +31,7 @@ class PurchaseServices extends BaseServices<any> {
       {
         $match: {
           user: new Types.ObjectId(userId),
-          $or: [
-            { sellerName: { $regex: search, $options: 'i' } },
-            { productName: { $regex: search, $options: 'i' } }
-          ]
+          $or: [{ sellerName: { $regex: search, $options: 'i' } }, { productName: { $regex: search, $options: 'i' } }]
         }
       },
       ...sortAndPaginatePipeline(query)

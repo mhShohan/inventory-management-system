@@ -19,8 +19,12 @@ const loginSchema = z.object({
 });
 
 const changePasswordSchema = z.object({
-  oldPassword: z.string({ required_error: 'Old Password is required!' }).min(6, { message: 'old password must have 6 characters' }),
-  newPassword: z.string({ required_error: 'New Password is required!' }).min(6, { message: 'new password must have 6 characters' }),
+  oldPassword: z
+    .string({ required_error: 'Old Password is required!' })
+    .min(6, { message: 'old password must have 6 characters' }),
+  newPassword: z
+    .string({ required_error: 'New Password is required!' })
+    .min(6, { message: 'new password must have 6 characters' })
 });
 
 const userValidator = { registerSchema, loginSchema, updatedProfileSchema, changePasswordSchema };

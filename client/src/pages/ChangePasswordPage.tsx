@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { useChangePasswordMutation } from '../redux/features/authApi';
 import { useNavigate } from 'react-router-dom';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 const ChangePasswordPage = () => {
   const [changePassword] = useChangePasswordMutation();
@@ -45,7 +46,6 @@ const ChangePasswordPage = () => {
         navigate('/profile');
       }
     } catch (error: any) {
-      console.log(error);
       toast.error(error.data.message, { id: error.data.statusCode });
     }
   };
@@ -83,6 +83,9 @@ const ChangePasswordPage = () => {
         />
         <Button type='primary' onClick={handleSubmit}>
           Change Password
+        </Button>
+        <Button type='default' onClick={() => navigate('/profile')}>
+          <ArrowLeftOutlined /> Go Back
         </Button>
       </Flex>
     </Flex>

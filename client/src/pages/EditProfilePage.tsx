@@ -1,4 +1,4 @@
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { Button, Col, Flex, Row } from 'antd';
 import userProPic from '../assets/User.png';
 import CustomInput from '../components/CustomInput';
@@ -13,6 +13,7 @@ import { config } from '../utils/config';
 const EditProfilePage = () => {
   const { data, isLoading } = useGetSelfProfileQuery(undefined);
   const [updateProfile] = useUpdateProfileMutation();
+  const navigate = useNavigate();
 
   if (isLoading) {
     return <Loader />;
@@ -56,7 +57,7 @@ const EditProfilePage = () => {
   return (
     <Row>
       <Col xs={{ span: 24 }} lg={{ span: 8 }}>
-        <Flex align='center' vertical>
+        <Flex align='center' vertical style={{ margin: '1rem 0' }}>
           <Flex
             justify='center'
             style={{
@@ -103,6 +104,11 @@ const EditProfilePage = () => {
         </Flex>
       </Col>
       <Col xs={{ span: 24 }} lg={{ span: 16 }}>
+        <Flex justify='end' style={{ margin: '1rem 0' }}>
+          <Button type='default' onClick={() => navigate('/profile')}>
+            <ArrowLeftOutlined /> Go Back
+          </Button>
+        </Flex>
         <EditProfileForm data={data?.data} />
       </Col>
     </Row>

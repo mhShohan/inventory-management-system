@@ -22,7 +22,6 @@ class SellerServices extends BaseServices<any> {
    *  Get all sale
    */
   async readAll(query: Record<string, unknown> = {}, userId: string) {
-
     const search = query.search ? query.search : '';
 
     const data = await this.model.aggregate([

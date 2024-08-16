@@ -54,7 +54,7 @@ class UserServices {
     const hashedPassword = await bcrypt.hash(payload.newPassword, 10);
     const updatedUser = await this.model.findByIdAndUpdate(userId, { password: hashedPassword });
 
-    return updatedUser
+    return updatedUser;
   }
 }
 
