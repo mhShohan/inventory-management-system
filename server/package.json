@@ -1,7 +1,7 @@
 {
   "name": "inventory-management-system-server",
   "version": "1.1.0",
-  "description": "",
+  "description": "A full stack Inventory management system",
   "main": "server.js",
   "scripts": {
     "start": "node ./dist/server.js",
@@ -12,9 +12,6 @@
     "format": "prettier --ignore-path .gitignore --write \"./src/**/*.+(js|ts|json)\"",
     "format:fix": "npx prettier --write src"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
@@ -39,5 +36,20 @@
     "prettier": "^3.1.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.2.2"
-  }
+  },
+  "homepage": "https://github.com/mhShohan/inventory-management-system",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mhShohan/inventory-management-system.git"
+  },
+  "author": "mhShohan",
+  "license": "MIT",
+  "keywords": [
+    "inventory management system",
+    "typescript",
+    "node.js",
+    "react",
+    "mongoDB",
+    "full-stack"
+  ]
 }
