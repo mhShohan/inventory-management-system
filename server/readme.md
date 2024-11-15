@@ -31,13 +31,17 @@
   ```bash
     NODE_ENV=dev
     PORT=5000
-    DATABASE_URL=mongodb+srv://Shohan:Shohan@nodejs.q4exi.mongodb.net/fs-assignment-1
-    JWT_SECRET=asdfasiefanfasdfaiseuhasdf
+    DATABASE_URL=
+    JWT_SECRET=your_jwt_secret
   ```
 
 - Step 2: install all the dependencies using the command
   ```bash
-    npm install
+    npm install 
+    #or 
+    yarn
+    #or
+    pnpm instal
   ```
 - Step 3: run the development server using the command
 
