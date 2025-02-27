@@ -42,9 +42,9 @@ class ProductServices extends BaseServices<any> {
             product: product[0]?._id,
             sellerName: seller?.name,
             productName: product[0]?.name,
-            quantity: Number(product[0]?.stock),
-            unitPrice: Number(product[0]?.price),
-            totalPrice: Number(product[0]?.stock) * Number(product[0]?.price)
+            quantity: product[0]?.stock,
+            unitPrice: product[0]?.price,
+            totalPrice: product[0]?.stock * product[0]?.price
           }
         ],
         { session }
@@ -54,6 +54,7 @@ class ProductServices extends BaseServices<any> {
 
       return product;
     } catch (error) {
+      console.log(error);
       await session.abortTransaction();
       throw new CustomError(400, 'Product create failed');
     } finally {

@@ -81,7 +81,7 @@ const ChangePasswordPage = () => {
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <Button type='primary' onClick={handleSubmit}>
+        <Button type='primary' onClick={handleSubmit} disabled={true}>
           Change Password
         </Button>
         <Button type='default' onClick={() => navigate('/profile')}>

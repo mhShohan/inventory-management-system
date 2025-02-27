@@ -2,7 +2,6 @@ import { Button, Flex } from 'antd';
 import { FieldValues, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import toastMessage from '../../lib/toastMessage';
 import { useLoginMutation } from '../../redux/features/authApi';
 import { useAppDispatch } from '../../redux/hooks';
 import { loginUser } from '../../redux/services/authSlice';
@@ -18,7 +17,7 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      email: 'visitor@gmail.com',
+      email: 'user@gmail.com',
       password: 'pass123',
     },
   });
@@ -35,7 +34,8 @@ const LoginPage = () => {
         toast.success('Successfully Login!', { id: toastId });
       }
     } catch (error: any) {
-      toastMessage({ icon: 'error', text: error.data.message });
+      toast.error(error.data.message, { id: toastId });
+      // toastMessage({ icon: 'error', text: error.data.message });
     }
   };
 
