@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Roboto, Ubuntu } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
+import QueryProvider from '@/components/query-provider';
 
 const roboto = Roboto({
   variable: '--font-roboto',
@@ -33,7 +34,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <QueryProvider>{children}</QueryProvider>
         </ThemeProvider>
       </body>
     </html>
