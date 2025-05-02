@@ -45,10 +45,10 @@
 
 :root {
   --radius: 0.625rem;
-  --background: rgba(255, 255, 255, 1);
-  --foreground: rgba(33, 33, 33, 1);
-  --card: rgba(255, 255, 255, 1);
-  --card-foreground: rgba(33, 33, 33, 1);
+  --background: rgba(255, 255, 255, .5);
+  --foreground: rgba(33, 33, 33, .5);
+  --card: rgba(255, 255, 255, .5);
+  --card-foreground: rgba(33, 33, 33, .5);
   --popover: rgba(255, 255, 255, 1);
   --popover-foreground: rgba(33, 33, 33, 1);
   --primary: #22333b;
@@ -79,7 +79,7 @@
 }
 
 .dark {
-  --background: rgba(33, 33, 33, 1);
+  --background: rgba(33, 33, 33, .5);
   --foreground: #89A8B2;
   --card: #22333b;
   --card-foreground: #89A8B2;
