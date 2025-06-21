@@ -3,6 +3,7 @@ import { FieldValues, useForm } from 'react-hook-form';
 import CustomInput from '../CustomInput';
 import { useCreateSellerMutation } from '../../redux/features/management/sellerApi';
 import toastMessage from '../../lib/toastMessage';
+import { SpinnerIcon } from '@phosphor-icons/react';
 
 interface CreateSellerModalProps {
   openModal: boolean;
@@ -10,7 +11,7 @@ interface CreateSellerModalProps {
 }
 
 const CreateSellerModal = ({ openModal, setOpenModal }: CreateSellerModalProps) => {
-  const [createSeller] = useCreateSellerMutation();
+  const [createSeller, { isLoading }] = useCreateSellerMutation();
   const {
     handleSubmit,
     register,
@@ -68,7 +69,8 @@ const CreateSellerModal = ({ openModal, setOpenModal }: CreateSellerModalProps) 
             required={true}
           />
           <Flex justify='center' style={{ margin: '1rem' }}>
-            <Button key='submit' type='primary' htmlType='submit'>
+            <Button key='submit' type='primary' htmlType='submit' disabled={isLoading}>
+              {isLoading && <SpinnerIcon className='spin' weight='bold' />}
               Create Seller
             </Button>
           </Flex>

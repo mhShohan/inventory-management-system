@@ -161,3 +161,18 @@ li.ant-menu-item {
   margin-right: .2rem;
   font-weight: 600;
 }
+
+@keyframes spin-animation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  display: inline-block;
+  animation: spin-animation 2s linear infinite;
+}

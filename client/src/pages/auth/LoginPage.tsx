@@ -1,14 +1,15 @@
+import { SpinnerIcon } from '@phosphor-icons/react';
 import { Button, Flex } from 'antd';
 import { FieldValues, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
+import toastMessage from '../../lib/toastMessage';
 import { useLoginMutation } from '../../redux/features/authApi';
 import { useAppDispatch } from '../../redux/hooks';
 import { loginUser } from '../../redux/services/authSlice';
 import decodeToken from '../../utils/decodeToken';
 
 const LoginPage = () => {
-  const [userLogin] = useLoginMutation();
+  const [userLogin, { isLoading }] = useLoginMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {
@@ -17,13 +18,12 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      email: 'user@gmail.com',
+      email: 'test-visitor@gmail.com',
       password: 'pass123',
     },
   });
 
   const onSubmit = async (data: FieldValues) => {
-    const toastId = toast.loading('Logging...');
     try {
       const res = await userLogin(data).unwrap();
 
@@ -31,11 +31,10 @@ const LoginPage = () => {
         const user = decodeToken(res.data.token);
         dispatch(loginUser({ token: res.data.token, user }));
         navigate('/');
-        toast.success('Successfully Login!', { id: toastId });
+        toastMessage({ icon: 'success', text: 'Successfully Login!' });
       }
     } catch (error: any) {
-      toast.error(error.data.message, { id: toastId });
-      // toastMessage({ icon: 'error', text: error.data.message });
+      toastMessage({ icon: 'error', text: error.data.message });
     }
   };
 
@@ -72,8 +71,10 @@ const LoginPage = () => {
             <Button
               htmlType='submit'
               type='primary'
-              style={{ textTransform: 'uppercase', fontWeight: 'bold' }}
+              disabled={isLoading}
+              style={{ textTransform: 'uppercase', fontWeight: 'bold', width: '100%' }}
             >
+              {isLoading && <SpinnerIcon className='spin' weight='bold' />}
               Login
             </Button>
           </Flex>

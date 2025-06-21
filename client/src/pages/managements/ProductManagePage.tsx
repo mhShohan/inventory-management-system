@@ -17,6 +17,7 @@ import { useGetAllCategoriesQuery } from '../../redux/features/management/catego
 import { useGetAllSellerQuery } from '../../redux/features/management/sellerApi';
 import { useGetAllBrandsQuery } from '../../redux/features/management/brandApi';
 import { useCreateSaleMutation } from '../../redux/features/management/saleApi';
+import { SpinnerIcon } from '@phosphor-icons/react';
 
 const ProductManagePage = () => {
   const [current, setCurrent] = useState(1);
@@ -132,7 +133,7 @@ const SellProductModal = ({ product }: { product: IProduct & { key: string } }) 
     reset,
     formState: { errors },
   } = useForm();
-  const [saleProduct] = useCreateSaleMutation();
+  const [saleProduct, { isLoading }] = useCreateSaleMutation();
 
   const onSubmit = async (data: FieldValues) => {
     const payload = {
@@ -151,7 +152,6 @@ const SellProductModal = ({ product }: { product: IProduct & { key: string } }) 
         handleCancel();
       }
     } catch (error: any) {
-      console.log(error);
       handleCancel();
       toastMessage({ icon: 'error', text: error.data.message });
     }
@@ -202,7 +202,8 @@ const SellProductModal = ({ product }: { product: IProduct & { key: string } }) 
             type='number'
           />
           <Flex justify='center' style={{ marginTop: '1rem' }}>
-            <Button htmlType='submit' type='primary'>
+            <Button htmlType='submit' type='primary' disabled={isLoading}>
+              {isLoading && <SpinnerIcon className='spin' weight='bold' />}
               Sell Product
             </Button>
           </Flex>
@@ -218,7 +219,7 @@ const SellProductModal = ({ product }: { product: IProduct & { key: string } }) 
 const AddStockModal = ({ product }: { product: IProduct & { key: string } }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { handleSubmit, register, reset } = useForm();
-  const [addToStock] = useAddStockMutation();
+  const [addToStock, { isLoading }] = useAddStockMutation();
 
   const onSubmit = async (data: FieldValues) => {
     const payload = {
@@ -261,7 +262,8 @@ const AddStockModal = ({ product }: { product: IProduct & { key: string } }) => 
         <form onSubmit={handleSubmit(onSubmit)} style={{ margin: '2rem' }}>
           <CustomInput name='stock' label='Add Stock' register={register} type='number' />
           <Flex justify='center' style={{ marginTop: '1rem' }}>
-            <Button htmlType='submit' type='primary'>
+            <Button htmlType='submit' type='primary' disabled={isLoading}>
+              {isLoading && <SpinnerIcon className='spin' weight='bold' />}
               Submit
             </Button>
           </Flex>

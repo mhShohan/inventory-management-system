@@ -2,9 +2,10 @@ import { Button, Flex } from 'antd';
 import { useState } from 'react';
 import { useCreateCategoryMutation } from '../../redux/features/management/categoryApi';
 import toastMessage from '../../lib/toastMessage';
+import { SpinnerIcon } from '@phosphor-icons/react';
 
 const CreateCategory = () => {
-  const [createCategory] = useCreateCategoryMutation();
+  const [createCategory, { isLoading }] = useCreateCategoryMutation();
   const [category, setCategory] = useState('');
 
   const handleClick = async () => {
@@ -50,8 +51,10 @@ const CreateCategory = () => {
         htmlType='button'
         onClick={handleClick}
         type='primary'
+        disabled={isLoading}
         style={{ textTransform: 'uppercase', fontWeight: 'bold' }}
       >
+        {isLoading && <SpinnerIcon className='spin' weight='bold' />}
         Create Category
       </Button>
     </Flex>

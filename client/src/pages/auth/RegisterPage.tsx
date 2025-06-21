@@ -1,3 +1,4 @@
+import { SpinnerIcon } from '@phosphor-icons/react';
 import { Button, Flex } from 'antd';
 import { FieldValues, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,12 +7,11 @@ import { useRegisterMutation } from '../../redux/features/authApi';
 import { useAppDispatch } from '../../redux/hooks';
 import { loginUser } from '../../redux/services/authSlice';
 import decodeToken from '../../utils/decodeToken';
-import { toast } from 'sonner';
 
 const RegisterPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [userRegistration] = useRegisterMutation();
+  const [userRegistration, { isLoading }] = useRegisterMutation();
   const {
     handleSubmit,
     register,
@@ -19,7 +19,6 @@ const RegisterPage = () => {
   } = useForm();
 
   const onSubmit = async (data: FieldValues) => {
-    const toastId = toast.loading('Registering new account!');
     try {
       const res = await userRegistration(data).unwrap();
 
@@ -31,10 +30,13 @@ const RegisterPage = () => {
         const user = decodeToken(res.data.token);
         dispatch(loginUser({ token: res.data.token, user }));
         navigate('/');
-        toast.success(res.message, { id: toastId });
+        console.log(res);
+        toastMessage({ icon: 'success', text: res.message });
       }
     } catch (error: any) {
-      toastMessage({ icon: 'error', text: error.data.message });
+      const errMsg =
+        error?.data?.errors?.[Object.keys(error?.data?.errors)[0]] || error.data.message;
+      toastMessage({ icon: 'error', text: errMsg });
     }
   };
 
@@ -81,8 +83,9 @@ const RegisterPage = () => {
             <Button
               htmlType='submit'
               type='primary'
-              style={{ textTransform: 'uppercase', fontWeight: 'bold' }}
+              style={{ textTransform: 'uppercase', fontWeight: 'bold', width: '100%' }}
             >
+              {isLoading && <SpinnerIcon className='spin' weight='bold' />}
               Register
             </Button>
           </Flex>

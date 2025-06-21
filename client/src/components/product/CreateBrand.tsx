@@ -2,9 +2,10 @@ import { Button, Flex } from 'antd';
 import { useState } from 'react';
 import { useCreateBrandMutation } from '../../redux/features/management/brandApi';
 import toastMessage from '../../lib/toastMessage';
+import { SpinnerIcon } from '@phosphor-icons/react';
 
 const CreateBrand = () => {
-  const [createCategory] = useCreateBrandMutation();
+  const [createCategory, { isLoading }] = useCreateBrandMutation();
   const [brand, setBrand] = useState('');
 
   const handleClick = async () => {
@@ -48,8 +49,10 @@ const CreateBrand = () => {
         htmlType='button'
         onClick={handleClick}
         type='primary'
+        disabled={isLoading}
         style={{ textTransform: 'uppercase', fontWeight: 'bold' }}
       >
+        {isLoading && <SpinnerIcon className='spin' weight='bold' />}
         Create Brand
       </Button>
     </Flex>
