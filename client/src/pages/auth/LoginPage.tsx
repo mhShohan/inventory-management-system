@@ -80,7 +80,7 @@ const LoginPage = () => {
           </Flex>
         </form>
         <p style={{ marginTop: '1rem' }}>
-          Don't have any account? <Link to='/register'>Resister Here</Link>
+          Don't have any account? <Link to='/register'>Register Here</Link>
         </p>
       </Flex>
     </Flex>
