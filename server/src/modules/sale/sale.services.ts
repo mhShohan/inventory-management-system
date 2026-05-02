@@ -6,6 +6,9 @@ import BaseServices from '../baseServices';
 import Sale from './sale.model';
 import Product from '../product/product.model';
 import CustomError from '../../errors/customError';
+import StockInsufficientError from '../../errors/stockInsufficientError';
+import { ISaleItem, IStockInsufficientItem } from './sale.interface';
+import inventoryTransactionServices from '../inventoryTransaction/inventoryTransaction.services';
 
 class SaleServices extends BaseServices<any> {
   constructor(model: any, modelName: string) {
@@ -13,30 +16,135 @@ class SaleServices extends BaseServices<any> {
   }
 
   /**
-   * Create new sale and decrease product stock
+   * Create new sale with anti-oversell logic
+   * Supports both single product and multiple products (via items array)
    */
   async create(payload: any, userId: string) {
-    const { productPrice, quantity } = payload;
-    payload.user = userId;
-    payload.totalPrice = productPrice * quantity;
-    const product = await Product.findById(payload.product);
+    const { items, product, productName, productPrice, quantity, buyerName, date } = payload;
+    
+    let saleItems: ISaleItem[] = [];
+    let totalPrice = 0;
 
-    if (quantity > product!.stock) {
-      throw new CustomError(400, `${quantity} product are not available in stock!`);
+    if (items && items.length > 0) {
+      saleItems = items.map((item: any) => ({
+        ...item,
+        totalPrice: item.productPrice * item.quantity
+      }));
+      totalPrice = saleItems.reduce((sum: number, item: ISaleItem) => sum + item.totalPrice, 0);
+    } else {
+      saleItems = [{
+        product: new Types.ObjectId(product),
+        productName: productName,
+        productPrice: productPrice,
+        quantity: quantity,
+        totalPrice: productPrice * quantity
+      }];
+      totalPrice = productPrice * quantity;
     }
-    let result: any[];
+
+    const productIds = saleItems.map((item: ISaleItem) => item.product);
+    const products = await Product.find({ _id: { $in: productIds } });
+    const productMap = new Map(products.map(p => [p._id.toString(), p]));
+
+    const insufficientItems: IStockInsufficientItem[] = [];
+
+    for (const item of saleItems) {
+      const product = productMap.get(item.product.toString());
+      
+      if (!product) {
+        insufficientItems.push({
+          product: item.product.toString(),
+          productName: item.productName,
+          requestedQuantity: item.quantity,
+          currentStock: 0,
+          reason: '商品不存在'
+        });
+        continue;
+      }
+
+      if (item.quantity <= 0) {
+        insufficientItems.push({
+          product: item.product.toString(),
+          productName: item.productName,
+          requestedQuantity: item.quantity,
+          currentStock: product.stock,
+          reason: '销售数量必须大于0'
+        });
+        continue;
+      }
+
+      if (item.quantity > product.stock) {
+        insufficientItems.push({
+          product: item.product.toString(),
+          productName: item.productName,
+          requestedQuantity: item.quantity,
+          currentStock: product.stock,
+          reason: `库存不足，当前库存: ${product.stock}`
+        });
+      }
+    }
+
+    if (insufficientItems.length > 0) {
+      throw new StockInsufficientError(
+        400,
+        `${insufficientItems.length} 个商品库存不足`,
+        insufficientItems
+      );
+    }
+
     const session = await mongoose.startSession();
 
     try {
       session.startTransaction();
 
-      await Product.findByIdAndUpdate(product?._id, { $inc: { stock: -quantity } }, { session });
-      result = await this.model.create([payload], { session });
+      const saleData = {
+        user: new Types.ObjectId(userId),
+        buyerName,
+        date: new Date(date),
+        totalPrice,
+        items: saleItems,
+        product: items && items.length > 0 ? undefined : saleItems[0].product,
+        productName: items && items.length > 0 ? undefined : saleItems[0].productName,
+        productPrice: items && items.length > 0 ? undefined : saleItems[0].productPrice,
+        quantity: items && items.length > 0 ? undefined : saleItems[0].quantity
+      };
+
+      const [saleResult] = await this.model.create([saleData], { session });
+
+      for (const item of saleItems) {
+        const product = productMap.get(item.product.toString());
+        const previousStock = product!.stock;
+        const newStock = previousStock - item.quantity;
+
+        await Product.findByIdAndUpdate(
+          item.product,
+          { $inc: { stock: -item.quantity } },
+          { session }
+        );
+
+        await inventoryTransactionServices.createTransaction({
+          user: userId,
+          product: item.product,
+          productName: item.productName,
+          transactionType: 'SALE',
+          quantity: item.quantity,
+          previousStock,
+          newStock,
+          referenceId: saleResult._id,
+          referenceType: 'SALE',
+          note: `销售出库，客户: ${buyerName}`,
+          date: new Date(date)
+        }, session);
+      }
+
       await session.commitTransaction();
 
-      return result;
+      return saleResult;
     } catch (error) {
       await session.abortTransaction();
+      if (error instanceof StockInsufficientError) {
+        throw error;
+      }
       throw new CustomError(400, 'Sale create failed');
     } finally {
       await session.endSession();
@@ -54,7 +162,11 @@ class SaleServices extends BaseServices<any> {
       {
         $match: {
           user: new Types.ObjectId(userId),
-          $or: [{ productName: { $regex: search, $options: 'i' } }, { buyerName: { $regex: search, $options: 'i' } }]
+          $or: [
+            { productName: { $regex: search, $options: 'i' } },
+            { buyerName: { $regex: search, $options: 'i' } },
+            { items: { $elemMatch: { productName: { $regex: search, $options: 'i' } } } }
+          ]
         }
       },
       ...sortAndPaginatePipeline(query)

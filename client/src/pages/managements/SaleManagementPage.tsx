@@ -1,14 +1,35 @@
-import { DeleteFilled, EditFilled } from '@ant-design/icons';
-import type { PaginationProps, TableColumnsType } from 'antd';
-import { Button, Flex, Modal, Pagination, Table } from 'antd';
-import { useState } from 'react';
+import { DeleteFilled, EditFilled, PlusOutlined, CaretRightOutlined } from '@ant-design/icons';
+import type { PaginationProps, TableColumnsType, TableProps } from 'antd';
+import { Button, Flex, Modal, Pagination, Table, Tag } from 'antd';
+import { useState, useMemo } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import SearchInput from '../../components/SearchInput';
+import CreateSaleOrderModal from '../../components/modal/CreateSaleOrderModal';
 import toastMessage from '../../lib/toastMessage';
 import { useDeleteSaleMutation, useGetAllSaleQuery } from '../../redux/features/management/saleApi';
 import { IProduct } from '../../types/product.types';
-import { ITableSale } from '../../types/sale.type';
+import { ITableSale, ISaleItem } from '../../types/sale.type';
 import formatDate from '../../utils/formatDate';
+
+interface SaleTableItem {
+  key: string;
+  _id: string;
+  buyerName: string;
+  totalPrice: number;
+  date: string;
+  items?: ISaleItem[];
+  productName?: string;
+  productPrice?: number;
+  quantity?: number;
+}
+
+interface SaleDetailItem {
+  key: string;
+  productName: string;
+  productPrice: number;
+  quantity: number;
+  totalPrice: number;
+}
 
 const SaleManagementPage = () => {
   const [query, setQuery] = useState({
@@ -16,6 +37,7 @@ const SaleManagementPage = () => {
     limit: 10,
     search: '',
   });
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const { data, isFetching } = useGetAllSaleQuery(query);
 
@@ -23,61 +45,164 @@ const SaleManagementPage = () => {
     setQuery((prev) => ({ ...prev, page: page }));
   };
 
-  const tableData = data?.data?.map((sale: ITableSale) => ({
-    key: sale._id,
-    productName: sale.productName,
-    productPrice: sale.productPrice,
-    buyerName: sale.buyerName,
-    quantity: sale.quantity,
-    totalPrice: sale.totalPrice,
-    date: formatDate(sale.date),
-  }));
+  const tableData: SaleTableItem[] = useMemo(() => {
+    return (data?.data || []).map((sale: ITableSale) => ({
+      key: sale._id,
+      _id: sale._id,
+      buyerName: sale.buyerName,
+      totalPrice: sale.totalPrice,
+      date: formatDate(sale.date),
+      items: sale.items,
+      productName: sale.productName,
+      productPrice: sale.productPrice,
+      quantity: sale.quantity,
+    }));
+  }, [data?.data]);
 
-  const columns: TableColumnsType<any> = [
+  const getDetailItems = (record: SaleTableItem): SaleDetailItem[] => {
+    if (record.items && record.items.length > 0) {
+      return record.items.map((item, index) => ({
+        key: `${record.key}-${index}`,
+        productName: item.productName,
+        productPrice: item.productPrice,
+        quantity: item.quantity,
+        totalPrice: item.totalPrice,
+      }));
+    }
+    
+    if (record.productName) {
+      return [{
+        key: `${record.key}-0`,
+        productName: record.productName,
+        productPrice: record.productPrice || 0,
+        quantity: record.quantity || 0,
+        totalPrice: record.totalPrice,
+      }];
+    }
+    
+    return [];
+  };
+
+  const detailColumns: TableColumnsType<SaleDetailItem> = [
     {
-      title: 'Product Name',
-      key: 'productName',
+      title: '商品名称',
       dataIndex: 'productName',
+      key: 'productName',
     },
     {
-      title: 'Product Price',
-      key: 'productPrice',
+      title: '单价',
       dataIndex: 'productPrice',
+      key: 'productPrice',
+      align: 'center',
+      render: (price: number) => `¥${price}`,
+    },
+    {
+      title: '数量',
+      dataIndex: 'quantity',
+      key: 'quantity',
       align: 'center',
     },
     {
-      title: 'Buyer Name',
+      title: '小计',
+      dataIndex: 'totalPrice',
+      key: 'totalPrice',
+      align: 'center',
+      render: (price: number) => `¥${price}`,
+    },
+  ];
+
+  const expandableConfig: TableProps<SaleTableItem>['expandable'] = {
+    expandIcon: ({ expanded, onExpand, record }) => (
+      <CaretRightOutlined
+        rotate={expanded ? 90 : 0}
+        onClick={(e) => onExpand(record, e)}
+        style={{ cursor: 'pointer', color: '#1890ff' }}
+      />
+    ),
+    expandedRowRender: (record) => {
+      const detailItems = getDetailItems(record);
+      return (
+        <Table
+          size="small"
+          columns={detailColumns}
+          dataSource={detailItems}
+          pagination={false}
+          showHeader={true}
+        />
+      );
+    },
+  };
+
+  const getProductSummary = (record: SaleTableItem): React.ReactNode => {
+    if (record.items && record.items.length > 0) {
+      if (record.items.length === 1) {
+        return (
+          <span>
+            {record.items[0].productName}
+            <Tag color="blue" style={{ marginLeft: 8 }}>
+              x{record.items[0].quantity}
+            </Tag>
+          </span>
+        );
+      }
+      return (
+        <span>
+          {record.items[0].productName}
+          <Tag color="blue" style={{ marginLeft: 8 }}>
+            +{record.items.length - 1} 个商品
+          </Tag>
+        </span>
+      );
+    }
+    
+    if (record.productName) {
+      return (
+        <span>
+          {record.productName}
+          <Tag color="blue" style={{ marginLeft: 8 }}>
+            x{record.quantity}
+          </Tag>
+        </span>
+      );
+    }
+    
+    return '-';
+  };
+
+  const columns: TableColumnsType<SaleTableItem> = [
+    {
+      title: '商品摘要',
+      key: 'productSummary',
+      render: (_, record) => getProductSummary(record),
+    },
+    {
+      title: '客户名称',
       key: 'buyerName',
       dataIndex: 'buyerName',
       align: 'center',
     },
     {
-      title: 'Quantity',
-      key: 'quantity',
-      dataIndex: 'quantity',
-      align: 'center',
-    },
-    {
-      title: 'Total Price',
+      title: '订单总金额',
       key: 'totalPrice',
       dataIndex: 'totalPrice',
       align: 'center',
+      render: (price: number) => <strong>¥{price}</strong>,
     },
     {
-      title: 'Selling Date',
+      title: '销售日期',
       key: 'date',
       dataIndex: 'date',
       align: 'center',
     },
     {
-      title: 'Action',
+      title: '操作',
       key: 'x',
       align: 'center',
-      render: (item) => {
+      render: (_, record) => {
         return (
           <div style={{ display: 'flex' }}>
-            <UpdateModal product={item} />
-            <DeleteModal id={item.key} />
+            <UpdateModal product={record as unknown as IProduct} />
+            <DeleteModal id={record.key} />
           </div>
         );
       },
@@ -91,13 +216,17 @@ const SaleManagementPage = () => {
 
   return (
     <>
-      <Flex justify='end' style={{ margin: '5px', gap: 4 }}>
-        {/* <DatePicker
-          onChange={onDateChange}
-          placeholder='Search by Selling date...'
-          style={{ minWidth: '250px' }}
-        /> */}
-        <SearchInput setQuery={setQuery} placeholder='Search Sold Products...' />
+      <Flex justify='space-between' style={{ margin: '5px', gap: 4 }}>
+        <Button
+          type='primary'
+          icon={<PlusOutlined />}
+          onClick={() => setIsCreateModalOpen(true)}
+        >
+          创建销售订单
+        </Button>
+        <Flex style={{ gap: 4 }}>
+          <SearchInput setQuery={setQuery} placeholder='Search Sold Products...' />
+        </Flex>
       </Flex>
       <Table
         size='small'
@@ -105,6 +234,7 @@ const SaleManagementPage = () => {
         columns={columns}
         dataSource={tableData}
         pagination={false}
+        expandable={expandableConfig}
       />
       <Flex justify='center' style={{ marginTop: '1rem' }}>
         <Pagination
@@ -114,6 +244,10 @@ const SaleManagementPage = () => {
           total={data?.meta?.total}
         />
       </Flex>
+      <CreateSaleOrderModal
+        open={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+      />
     </>
   );
 };
