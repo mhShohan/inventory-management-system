@@ -1,9 +1,10 @@
-import { DeleteFilled, EditFilled } from '@ant-design/icons';
+import { DeleteFilled, EditFilled, PlusOutlined } from '@ant-design/icons';
 import type { PaginationProps, TableColumnsType } from 'antd';
 import { Button, Flex, Modal, Pagination, Table } from 'antd';
 import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import SearchInput from '../../components/SearchInput';
+import CreateSaleOrderModal from '../../components/modal/CreateSaleOrderModal';
 import toastMessage from '../../lib/toastMessage';
 import { useDeleteSaleMutation, useGetAllSaleQuery } from '../../redux/features/management/saleApi';
 import { IProduct } from '../../types/product.types';
@@ -16,6 +17,7 @@ const SaleManagementPage = () => {
     limit: 10,
     search: '',
   });
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const { data, isFetching } = useGetAllSaleQuery(query);
 
@@ -91,13 +93,17 @@ const SaleManagementPage = () => {
 
   return (
     <>
-      <Flex justify='end' style={{ margin: '5px', gap: 4 }}>
-        {/* <DatePicker
-          onChange={onDateChange}
-          placeholder='Search by Selling date...'
-          style={{ minWidth: '250px' }}
-        /> */}
-        <SearchInput setQuery={setQuery} placeholder='Search Sold Products...' />
+      <Flex justify='space-between' style={{ margin: '5px', gap: 4 }}>
+        <Button
+          type='primary'
+          icon={<PlusOutlined />}
+          onClick={() => setIsCreateModalOpen(true)}
+        >
+          创建销售订单
+        </Button>
+        <Flex style={{ gap: 4 }}>
+          <SearchInput setQuery={setQuery} placeholder='Search Sold Products...' />
+        </Flex>
       </Flex>
       <Table
         size='small'
@@ -114,6 +120,10 @@ const SaleManagementPage = () => {
           total={data?.meta?.total}
         />
       </Flex>
+      <CreateSaleOrderModal
+        open={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+      />
     </>
   );
 };

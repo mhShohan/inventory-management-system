@@ -9,6 +9,7 @@ import validationError from '../errors/validationError';
 import castError from '../errors/castError';
 import handleCustomError from '../errors/handleCustomError';
 import CustomError from '../errors/customError';
+import StockInsufficientError from '../errors/stockInsufficientError';
 import httpStatus from 'http-status';
 
 const globalErrorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
@@ -17,12 +18,17 @@ const globalErrorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
     statusCode: 500,
     message: 'Internal Server Error!',
     errors: {},
-    stack: config.nodeEnv === 'dev' ? err.stack : null
+    stack: config.nodeEnv === 'dev' ? err.stack : null,
+    insufficientItems: undefined as any
   };
 
   // console.log(err);
 
-  if (err instanceof ZodError) {
+  if (err instanceof StockInsufficientError) {
+    errorResponse.statusCode = err.statusCode;
+    errorResponse.message = err.message;
+    errorResponse.insufficientItems = err.insufficientItems;
+  } else if (err instanceof ZodError) {
     const errors = zodErrorSanitize(err);
 
     errorResponse.statusCode = httpStatus.BAD_REQUEST;
