@@ -208,7 +208,15 @@ class SaleServices extends BaseServices<any> {
             week: { $isoWeek: '$date' },
             year: { $isoWeekYear: '$date' }
           },
-          totalQuantity: { $sum: '$quantity' },
+          totalQuantity: {
+            $sum: {
+              $cond: {
+                if: { $and: [{ $isArray: '$items' }, { $gt: [{ $size: '$items' }, 0] }] },
+                then: { $sum: '$items.quantity' },
+                else: { $ifNull: ['$quantity', 0] }
+              }
+            }
+          },
           totalRevenue: { $sum: '$totalPrice' }
         }
       },
@@ -243,7 +251,15 @@ class SaleServices extends BaseServices<any> {
           _id: {
             year: { $year: '$date' }
           },
-          totalQuantity: { $sum: '$quantity' },
+          totalQuantity: {
+            $sum: {
+              $cond: {
+                if: { $and: [{ $isArray: '$items' }, { $gt: [{ $size: '$items' }, 0] }] },
+                then: { $sum: '$items.quantity' },
+                else: { $ifNull: ['$quantity', 0] }
+              }
+            }
+          },
           totalRevenue: { $sum: '$totalPrice' }
         }
       },
@@ -278,7 +294,15 @@ class SaleServices extends BaseServices<any> {
             month: { $month: '$date' },
             year: { $year: '$date' }
           },
-          totalQuantity: { $sum: '$quantity' },
+          totalQuantity: {
+            $sum: {
+              $cond: {
+                if: { $and: [{ $isArray: '$items' }, { $gt: [{ $size: '$items' }, 0] }] },
+                then: { $sum: '$items.quantity' },
+                else: { $ifNull: ['$quantity', 0] }
+              }
+            }
+          },
           totalRevenue: { $sum: '$totalPrice' }
         }
       },
@@ -316,7 +340,15 @@ class SaleServices extends BaseServices<any> {
             month: { $month: '$date' },
             year: { $year: '$date' }
           },
-          totalQuantity: { $sum: '$quantity' },
+          totalQuantity: {
+            $sum: {
+              $cond: {
+                if: { $and: [{ $isArray: '$items' }, { $gt: [{ $size: '$items' }, 0] }] },
+                then: { $sum: '$items.quantity' },
+                else: { $ifNull: ['$quantity', 0] }
+              }
+            }
+          },
           totalRevenue: { $sum: '$totalPrice' }
         }
       },
