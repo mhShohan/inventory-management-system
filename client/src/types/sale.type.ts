@@ -27,14 +27,14 @@ export interface ISale {
 
 export interface ITableSale {
   _id: string;
-  product: {
+  product?: {
     _id: string;
     name: string;
     price: number;
   }
-  productPrice: number;
-  productName: string;
-  quantity: number;
+  productPrice?: number;
+  productName?: string;
+  quantity?: number;
   buyerName: string;
   date: string;
   totalPrice: number;

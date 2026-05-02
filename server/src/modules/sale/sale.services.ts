@@ -162,7 +162,11 @@ class SaleServices extends BaseServices<any> {
       {
         $match: {
           user: new Types.ObjectId(userId),
-          $or: [{ productName: { $regex: search, $options: 'i' } }, { buyerName: { $regex: search, $options: 'i' } }]
+          $or: [
+            { productName: { $regex: search, $options: 'i' } },
+            { buyerName: { $regex: search, $options: 'i' } },
+            { items: { $elemMatch: { productName: { $regex: search, $options: 'i' } } } }
+          ]
         }
       },
       ...sortAndPaginatePipeline(query)
